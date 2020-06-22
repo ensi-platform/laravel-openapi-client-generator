@@ -2,7 +2,7 @@
 
 use Orchestra\Testbench\TestCase;
 
-class GenerateNodeJSClientTest extends TestCase
+class GeneratePhpClientTest extends TestCase
 {
     public function setUp(): void
     {
@@ -14,15 +14,13 @@ class GenerateNodeJSClientTest extends TestCase
     protected function getEnvironmentSetUp($app): void {
         $app['config']->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
         $app['config']->set('openapi-client-generator.output_dir', '../openapi-test-client');
-        $app['config']->set('openapi-client-generator.nodejs_args.params', [
-            'npmName' => 'open-api-example-client-ts',
-            'useES6' => true,
-            'useSingleRequestParameter' => true,
-            'withInterfaces' => true,
-            'withSeparateModelsAndApi' => true,
-            'typescriptThreePlus' => true,
-            'apiPackage' => 'api',
-            'modelPackage' => 'dto'
+        $app['config']->set('openapi-client-generator.php_args.git_user_id', 'Baristanko');
+        $app['config']->set('openapi-client-generator.php_args.git_repo_id', 'openapi-client-php-example');
+        $app['config']->set('openapi-client-generator.php_args.params', [
+            'apiPackage' => 'Api',
+            'invokerPackage' => 'Baristanko\\OpenapiClientPHPExample',
+            'modelPackage' => 'Dto',
+            'packageName' => 'Openapi-Client-PHP-Example'
         ]);
     }
 
@@ -35,7 +33,7 @@ class GenerateNodeJSClientTest extends TestCase
 
     public function testPushAndPop()
     {
-        $code = $this->artisan('openapi:generate-client-nodejs');
+        $code = $this->artisan('openapi:generate-client-php');
         $this->assertSame($code, 0);
     }
 }

@@ -5,6 +5,7 @@ namespace Greensight\LaravelOpenapiClientGenerator;
 use Illuminate\Support\ServiceProvider;
 
 use Greensight\LaravelOpenapiClientGenerator\Commands\GenerateNodeJSClient;
+use Greensight\LaravelOpenapiClientGenerator\Commands\GeneratePhpClient;
 
 class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 {
@@ -31,7 +32,8 @@ class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                GenerateNodeJSClient::class
+                GenerateNodeJSClient::class,
+                GeneratePhpClient::class
             ]);
         }
     }

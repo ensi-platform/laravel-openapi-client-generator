@@ -20,7 +20,7 @@ return [
          * Specific generator params from https://openapi-generator.tech/docs/generators/typescript-axios/
          */
         'params' => [
-            'npmName' => 'open-api-example-client-ts',
+            'npmName' => '',
             'useES6' => true,
             'useSingleRequestParameter' => true,
             'withInterfaces' => true,
@@ -28,6 +28,25 @@ return [
             'typescriptThreePlus' => true,
             'apiPackage' => 'api',
             'modelPackage' => 'dto'
+        ]
+    ],
+
+    /**
+     * Args for generate php client
+     */
+    'php_args' => [
+        'git_user_id' => '',
+
+        'git_repo_id' => '',
+
+        /**
+         * Specific generator params from https://openapi-generator.tech/docs/generators/php/
+         */
+        'params' => [
+            'apiPackage' => 'Api',
+            'invokerPackage' => '',
+            'modelPackage' => 'Dto',
+            'packageName' => ''
         ]
     ]
 ];
