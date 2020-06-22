@@ -14,8 +14,11 @@ class GenerateNodeJSClientTest extends TestCase
     protected function getEnvironmentSetUp($app): void {
         $app['config']->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
         $app['config']->set('openapi-client-generator.output_dir', '../openapi-test-client');
-        $app['config']->set('openapi-client-generator.nodejs_args.params', [
-            'npmName' => 'open-api-example-client-ts',
+        $app['config']->set('openapi-client-generator.git_user', 'Baristanko');
+        $app['config']->set('openapi-client-generator.git_repo', 'openapi-client-js-example');
+        $app['config']->set('openapi-client-generator.git_host', 'github.com');
+        $app['config']->set('openapi-client-generator.js_args.params', [
+            'npmName' => 'open-api-example-client-js',
             'useES6' => true,
             'useSingleRequestParameter' => true,
             'withInterfaces' => true,

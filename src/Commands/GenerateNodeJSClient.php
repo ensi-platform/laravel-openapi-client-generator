@@ -7,12 +7,9 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Str;
-
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
 
-class GenerateNodeJSClient extends Command {
+class GenerateNodeJSClient extends GenerateClient {
     /**
      * @var string
      */
@@ -26,64 +23,22 @@ class GenerateNodeJSClient extends Command {
     /**
      * @var string
      */
-    private $apidocDir;
+    protected $client = 'js';
 
     /**
      * @var string
      */
-    private $outputDir;
-
-    /**
-     * @var array
-     */
-    private $params;
+    protected $generator = 'typescript-axios';
 
     public function __construct()
     {
         parent::__construct();
-
-        $this->apidocDir = config('openapi-client-generator.apidoc_dir');
-        $this->outputDir = config('openapi-client-generator.output_dir') . '-js';
-        $this->params = config('openapi-client-generator.nodejs_args.params');
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    protected function patchClientPackage(): void
     {
-        $this->generateClientPackage();
         $this->patchEnums();
     }
-
-    private function generateClientPackage(): void
-    {
-        $bin = 'npx @openapitools/openapi-generator-cli';
-        $command = "$bin generate -i $this->apidocDir/index.yaml -g typescript-axios -o $this->outputDir";
-
-        $paramsArgument = $this->getParamsArgument();
-
-        if (Str::length($paramsArgument) > 0) {
-            $command .= " -p \"$paramsArgument\"";
-        }
-
-        $this->info("Generate client by command: $command");
-
-        shell_exec($command);
-    }
-
-    private function getParamsArgument(): string
-    {
-        return collect($this->params)
-            ->map(function ($value, $name) {
-                $stringValue = var_export($value, true);
-                return "$name=$stringValue";
-            })
-            ->join(',');
-    }
-
 
     private function patchEnums(): void
     {
@@ -99,7 +54,7 @@ class GenerateNodeJSClient extends Command {
         );
 
         foreach ($files as $file) {
-            $this->info("Patch enum: " . $file->getPathName());
+            $this->info("Patch enum: $file");
 
             $patcher = new NodeJSEnumPatcher($file, $this->apidocDir);
             $patcher->patch();

@@ -14,8 +14,9 @@ class GeneratePhpClientTest extends TestCase
     protected function getEnvironmentSetUp($app): void {
         $app['config']->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
         $app['config']->set('openapi-client-generator.output_dir', '../openapi-test-client');
-        $app['config']->set('openapi-client-generator.php_args.git_user_id', 'Baristanko');
-        $app['config']->set('openapi-client-generator.php_args.git_repo_id', 'openapi-client-php-example');
+        $app['config']->set('openapi-client-generator.git_user', 'Baristanko');
+        $app['config']->set('openapi-client-generator.git_repo', 'openapi-client-php-example');
+        $app['config']->set('openapi-client-generator.git_host', 'github.com');
         $app['config']->set('openapi-client-generator.php_args.params', [
             'apiPackage' => 'Api',
             'invokerPackage' => 'Baristanko\\OpenapiClientPHPExample',
