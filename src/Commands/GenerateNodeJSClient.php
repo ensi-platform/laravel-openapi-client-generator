@@ -8,6 +8,7 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
+use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
 
 class GenerateNodeJSClient extends GenerateClient {
     /**
@@ -38,6 +39,7 @@ class GenerateNodeJSClient extends GenerateClient {
     protected function patchClientPackage(): void
     {
         $this->patchEnums();
+        $this->patchNpmPackage();
     }
 
     private function patchEnums(): void
@@ -59,5 +61,11 @@ class GenerateNodeJSClient extends GenerateClient {
             $patcher = new NodeJSEnumPatcher($file, $this->apidocDir);
             $patcher->patch();
         }
+    }
+
+    private function patchNpmPackage(): void
+    {
+        $patcher = new NpmPackagePatcher($this->outputDir);
+        $patcher->patch();
     }
 }

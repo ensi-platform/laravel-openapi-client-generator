@@ -8,9 +8,9 @@ return [
     'apidoc_dir' => public_path('api-docs'),
 
     /**
-     * Dir pattern where client package will be generated
+     * Dir template where client package will be generated
      */
-    'output_dir' => base_path('..' . PATH_SEPARATOR . '<paste_your_client_package_name>'),
+    'output_dir_template' => base_path('..' . PATH_SEPARATOR . '<paste_your_client_package_name>'),
 
     /**
      * Git user
@@ -18,9 +18,9 @@ return [
     'git_user' => '<paste_your_git_user>',
 
     /**
-     * Git repository name
+     * Git repository name template
      */
-    'git_repo' => '<paste_your_git_repo>',
+    'git_repo_template' => '<paste_your_git_repo_template>',
 
     /**
      * Git host

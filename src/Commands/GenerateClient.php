@@ -53,10 +53,10 @@ abstract class GenerateClient extends Command {
         parent::__construct();
 
         $this->apidocDir = config('openapi-client-generator.apidoc_dir');
-        $this->outputDir = config('openapi-client-generator.output_dir') . "-$this->client";
+        $this->outputDir = config('openapi-client-generator.output_dir_template') . "-$this->client";
 
         $this->gitUser = config('openapi-client-generator.git_user', '');
-        $this->gitRepo = config('openapi-client-generator.git_repo', '');
+        $this->gitRepo = config('openapi-client-generator.git_repo_template', '') . "-$this->client";
         $this->gitHost = config('openapi-client-generator.git_host', '');
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
