@@ -8,6 +8,7 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
+use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
 
 class GeneratePhpClient extends GenerateClient {
     /**
@@ -38,6 +39,7 @@ class GeneratePhpClient extends GenerateClient {
     protected function patchClientPackage(): void
     {
         $this->patchEnums();
+        $this->patchComposerPackage();
     }
 
     private function patchEnums(): void
@@ -59,5 +61,11 @@ class GeneratePhpClient extends GenerateClient {
             $patcher = new PhpEnumPatcher($file, $this->apidocDir);
             $patcher->patch();
         }
+    }
+
+    private function patchComposerPackage(): void
+    {
+        $patcher = new ComposerPackagePatcher($this->outputDir);
+        $patcher->patch();
     }
 }

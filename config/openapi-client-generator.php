@@ -10,7 +10,7 @@ return [
     /**
      * Dir template where client package will be generated
      */
-    'output_dir_template' => base_path('..' . PATH_SEPARATOR . '<paste_your_client_package_name>'),
+    'output_dir_template' => base_path('..' . DIRECTORY_SEPARATOR . '<paste_your_client_package_name>'),
 
     /**
      * Git user

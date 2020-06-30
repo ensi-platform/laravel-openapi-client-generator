@@ -2,42 +2,19 @@
 
 namespace Greensight\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class NpmPackagePatcher {
+class NpmPackagePatcher extends PackageManifestPatcher {
 
     /**
      * @var string
      */
-    protected $packageRootDir;
+    protected $manifestName = 'package.json';
 
-    public function __construct(string $packageRootDir)
+    protected function applyPatchers($manifest)
     {
-        $this->packageRootDir = $packageRootDir;
-    }
+        $manifest = $this->patchScripts($manifest);
+        $manifest = $this->patchLicense($manifest);
 
-    public function patch(): void {
-        $packageJson = $this->getPackageJson();
-
-        $packageJson = $this->patchScripts($packageJson);
-
-        $this->savePackageJson($packageJson);
-    }
-
-    private function getPackageJson()
-    {
-        return json_decode(file_get_contents($this->getPackageJsonPath()), true);
-    }
-
-    private function savePackageJson($packageJson)
-    {
-        return file_put_contents(
-            $this->getPackageJsonPath(),
-            json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-        );
-    }
-
-    private function getPackageJsonPath(): string
-    {
-        return $this->packageRootDir . DIRECTORY_SEPARATOR . 'package.json';
+        return $manifest;
     }
 
     private function patchScripts($packageJson)
