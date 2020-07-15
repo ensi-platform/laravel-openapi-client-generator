@@ -2,6 +2,8 @@
 
 namespace Greensight\LaravelOpenapiClientGenerator\Core\Patchers;
 
+use Illuminate\Support\Str;
+
 class NodeJSEnumPatcher extends EnumPatcher {
 
     public function __construct(string $enumFile, string $apidocDir)
@@ -24,7 +26,7 @@ class NodeJSEnumPatcher extends EnumPatcher {
                 $enum = $this->patchProperties(
                     $enum,
                     $constant['value'],
-                    $constant['name']
+                    $this->getEnumPropertyName($constant['name'])
                 );
             }
         }
@@ -46,5 +48,10 @@ class NodeJSEnumPatcher extends EnumPatcher {
     private function toSnakeCase(string $str): string
     {
         return strtolower(preg_replace('/-/', '_', $str));
+    }
+
+    private function getEnumPropertyName(string $name): string
+    {
+        return Str::ucfirst(Str::camel(Str::lower($name)));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Greensight\LaravelOpenapiClientGenerator\Core\Patchers;
 
+use Illuminate\Support\Str;
+
 class PhpEnumPatcher extends EnumPatcher {
 
     public function __construct(string $enumFile, string $apidocDir)
@@ -24,7 +26,7 @@ class PhpEnumPatcher extends EnumPatcher {
                 $enum = $this->patchConstantProperties(
                     $enum,
                     $constant['value'],
-                    $constant['name'],
+                    Str::upper($constant['name']),
                     $constant['title']
                 );
             }
