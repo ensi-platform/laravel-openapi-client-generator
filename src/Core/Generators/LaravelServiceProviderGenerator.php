@@ -84,7 +84,6 @@ class LaravelServiceProviderGenerator {
     private function addUse($namespace, $services): void
     {
         $namespace->addUse('GuzzleHttp\Client');
-        $namespace->addUse('GuzzleHttp\ClientInterface');
 
         foreach ($services as $service) {
             $namespace->addUse("$this->namespace\\$this->apiPackage\\$service");
@@ -99,14 +98,14 @@ class LaravelServiceProviderGenerator {
     private function addRegisterMethod($class, $services): void
     {
         $config = $this->camelCaseToKebab($this->packageName);
-        $body = "\$this->publishes([ __DIR__ . '../../../config' . self::CONFIG_FILENAME => config_path('$config.php') ]);";
+
+        $body = "\$this->publishes([ __DIR__ . '../../../config/' . self::CONFIG_FILENAME => config_path('$config.php') ]);";
+        $body .= "\n\n\$client = new Client(config('$config'));";
+        $body .= "\n\n\$config = new Configuration();";
+        $body .= "\n\$config->setHost(config('$config.base_uri'));\n";
 
         foreach ($services as $service) {
-            $body .= "\n\$this->app->when($service::class)->needs(ClientInterface::class)->give(function() { return new Client(config('$config')); });";
-        }
-
-        foreach ($services as $service) {
-            $body .= "\n\$this->app->singleton($service::class, $service::class);";
+            $body .= "\n\$this->app->instance($service::class, new $service(\$client, \$config));";
         }
 
         $class->addMethod('register')->setBody($body);
