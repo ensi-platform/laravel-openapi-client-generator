@@ -21,7 +21,7 @@ class GeneratePhpClientTest extends TestCase
             'apiPackage' => 'Api',
             'invokerPackage' => 'Baristanko\\OpenapiClientPHPExample',
             'modelPackage' => 'Dto',
-            'packageName' => 'Openapi-Client-PHP-Example'
+            'packageName' => 'OpenapiClientPHPExample'
         ]);
     }
 

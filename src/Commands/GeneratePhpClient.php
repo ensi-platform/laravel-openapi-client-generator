@@ -9,6 +9,7 @@ use RegexIterator;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Greensight\LaravelOpenapiClientGenerator\Core\Generators\LaravelServiceProviderGenerator;
 
 class GeneratePhpClient extends GenerateClient {
     /**
@@ -40,6 +41,7 @@ class GeneratePhpClient extends GenerateClient {
     {
         $this->patchEnums();
         $this->patchComposerPackage();
+        $this->generateLaravelServiceProvider();
     }
 
     private function patchEnums(): void
@@ -47,7 +49,7 @@ class GeneratePhpClient extends GenerateClient {
         $files = new RegexIterator(
             new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator(
-                    $this->outputDir,
+                    $this->outputDir . DIRECTORY_SEPARATOR . 'lib',
                     FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
                 )
             ),
@@ -67,5 +69,16 @@ class GeneratePhpClient extends GenerateClient {
     {
         $patcher = new ComposerPackagePatcher($this->outputDir);
         $patcher->patch();
+    }
+
+    private function generateLaravelServiceProvider(): void {
+        $generator = new LaravelServiceProviderGenerator(
+            $this->outputDir,
+            $this->params['invokerPackage'],
+            $this->params['packageName'],
+            $this->params['apiPackage']
+        );
+
+        $generator->generate();
     }
 }
