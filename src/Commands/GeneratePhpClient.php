@@ -32,9 +32,15 @@ class GeneratePhpClient extends GenerateClient {
      */
     protected $generator = 'php';
 
+    /**
+     * @var string
+     */
+    protected $composerName;
+
     public function __construct()
     {
         parent::__construct();
+        $this->composerName = config('openapi-client-generator.php_args.composer_name');
     }
 
     protected function patchClientPackage(): void
@@ -67,7 +73,7 @@ class GeneratePhpClient extends GenerateClient {
 
     private function patchComposerPackage(): void
     {
-        $patcher = new ComposerPackagePatcher($this->outputDir);
+        $patcher = new ComposerPackagePatcher($this->outputDir, $this->composerName);
         $patcher->patch();
     }
 

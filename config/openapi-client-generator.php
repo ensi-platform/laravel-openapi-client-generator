@@ -51,6 +51,11 @@ return [
      */
     'php_args' => [
         /**
+         * Package name for composer, use standard pattern namespace/package
+         */
+        'composer_name' => 'paste_your_composer_package_name',
+
+        /**
          * Specific generator params from https://openapi-generator.tech/docs/generators/php/
          */
         'params' => [
