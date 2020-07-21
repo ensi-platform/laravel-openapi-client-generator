@@ -99,7 +99,7 @@ class LaravelServiceProviderGenerator {
     {
         $config = $this->camelCaseToKebab($this->packageName);
 
-        $body = "\$this->publishes([ __DIR__ . '../../../config/' . self::CONFIG_FILENAME => config_path('$config.php') ]);";
+        $body = "\$this->publishes([ __DIR__ . '/../../../config/' . self::CONFIG_FILENAME => config_path('$config.php') ]);";
         $body .= "\n\n\$client = new Client(config('$config'));";
         $body .= "\n\n\$config = new Configuration();";
         $body .= "\n\$config->setHost(config('$config.base_uri'));\n";
