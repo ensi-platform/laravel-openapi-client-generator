@@ -69,7 +69,7 @@ class LaravelServiceProviderGenerator {
         $class->addConstant('CONFIG_FILENAME', self::CONFIG_FILENAME);
 
         $this->addRegisterMethod($class, $services);
-        $this->addBooMethod($class, $services);
+        $this->addBootMethod($class, $services);
 
         return $file;
     }
@@ -90,7 +90,7 @@ class LaravelServiceProviderGenerator {
         }
     }
 
-    private function addBooMethod($class): void
+    private function addBootMethod($class): void
     {
         $class->addMethod('boot');
     }

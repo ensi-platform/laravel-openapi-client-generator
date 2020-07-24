@@ -9,6 +9,9 @@ use RegexIterator;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
+use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
+
+use Greensight\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
 
 class GenerateNodeJSClient extends GenerateClient {
     /**
@@ -40,6 +43,8 @@ class GenerateNodeJSClient extends GenerateClient {
     {
         $this->patchEnums();
         $this->patchNpmPackage();
+        $this->patchTypeScriptConfig();
+        $this->generateNestModule();
     }
 
     private function patchEnums(): void
@@ -67,5 +72,21 @@ class GenerateNodeJSClient extends GenerateClient {
     {
         $patcher = new NpmPackagePatcher($this->outputDir);
         $patcher->patch();
+    }
+
+    private function patchTypeScriptConfig(): void
+    {
+        $patcher = new TypeScriptConfigPatcher($this->outputDir);
+        $patcher->patch();
+    }
+
+    private function generateNestModule(): void
+    {
+        $generator = new NestModuleGenerator(
+            $this->outputDir,
+            $this->params['npmName'],
+            $this->params['apiPackage']
+        );
+        $generator->generate();
     }
 }
