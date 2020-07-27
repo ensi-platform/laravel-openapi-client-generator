@@ -12,6 +12,7 @@ use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
+use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
 
 class GenerateNodeJSClient extends GenerateClient {
     /**
@@ -42,6 +43,7 @@ class GenerateNodeJSClient extends GenerateClient {
     protected function patchClientPackage(): void
     {
         $this->patchEnums();
+        $this->patchIndexFile();
         $this->patchNpmPackage();
         $this->patchTypeScriptConfig();
         $this->generateNestModule();
@@ -66,6 +68,12 @@ class GenerateNodeJSClient extends GenerateClient {
             $patcher = new NodeJSEnumPatcher($file, $this->apidocDir);
             $patcher->patch();
         }
+    }
+
+    private function patchIndexFile(): void
+    {
+        $patcher = new NodeJSIndexFilePatcher($this->outputDir, $this->params['modelPackage']);
+        $patcher->patch();
     }
 
     private function patchNpmPackage(): void
