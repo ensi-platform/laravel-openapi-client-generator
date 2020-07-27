@@ -147,7 +147,9 @@ class NestModuleGenerator {
         $configImport = basename(self::CONFIG_FILENAME, '.ts');
 
         return <<<EOD
-        import { Module } from '@nestjs/common';
+        import axios from 'axios';
+
+        import { Module, HttpException, HttpStatus } from '@nestjs/common';
 
         import { $servicesImport } from "../$this->apiPackage";
 
@@ -192,10 +194,27 @@ class NestModuleGenerator {
                     {
                         provide: $service,
                         useFactory: (config: ${className}Config): $service => {
-                            return new $service({
-                                basePath: config.uri,
-                                baseOptions: config.options
-                            });
+                            const client = axios.create();
+
+                            client.interceptors.response.use(
+                                response => response,
+                                error => {
+                                    if (error.response) {
+                                        throw new HttpException(error.response.data, error.response.status)
+                                    } else {
+                                        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+                                    }
+                                }
+                            );
+
+                            return new $service(
+                                {
+                                    basePath: config.uri,
+                                    baseOptions: config.options
+                                },
+                                null,
+                                client
+                            );
                         },
                         inject: [ ${className}Config ]
                     },
