@@ -44,8 +44,8 @@ class PhpEnumPatcher extends EnumPatcher {
         );
 
         $enum = preg_replace(
-            '/' . "self::$value" .  '/m',
-            "self::$name",
+            '/' . "self::$value," .  '/m',
+            "self::$name,",
             $enum
         );
 
