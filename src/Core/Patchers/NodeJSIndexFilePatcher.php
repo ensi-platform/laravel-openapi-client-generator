@@ -3,29 +3,32 @@
 namespace Greensight\LaravelOpenapiClientGenerator\Core\Patchers;
 
 class NodeJSIndexFilePatcher {
-
     /**
      * @var string
      */
-    protected $packageDir;
+    protected $sourceDir;
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $modelPackage;
+    protected $needExportNestModule;
 
-    public function __construct(string $packageDir, string $modelPackage)
+    public function __construct(string $sourceDir, bool $needExportNestModule)
     {
-        $this->packageDir = $packageDir;
-        $this->modelPackage = $modelPackage;
+        $this->sourceDir = $sourceDir;
+        $this->needExportNestModule = $needExportNestModule;
     }
 
     public function patch(): void
     {
-        $indexFile = $this->packageDir . DIRECTORY_SEPARATOR . 'index.ts';
+        $indexFile = $this->sourceDir . DIRECTORY_SEPARATOR . 'index.ts';
 
         $content = file_get_contents($indexFile);
-        $content .= "export * from \"./$this->modelPackage\";\n";
+        $content .= "export * from './utils';\n";
+
+        if ($this->needExportNestModule) {
+            $content .= "export * from './module';\n";
+        }
 
         file_put_contents($indexFile, $content);
     }

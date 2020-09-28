@@ -11,11 +11,11 @@
 import { registerAs } from "@nestjs/config";
 
 export default registerAs('customer-auth-client', () => ({
-    uri: process.env.CUSTOMER_AUTH_HOST
+    basePath: process.env.CUSTOMER_AUTH_URI
 }));
 ```
 У конфига можно задать два параметра:
-`uri` - базовый url для запросов. Обязателен
+`basePath` - базовый url для запросов. Обязателен
 `options` - любые другие опиции которые поддерживает инстанс axios. Может быть undefined.
 Имя, с которым регистрировать конфиг, берется из названия npm пакета: например, если имя пакета `@ensi/customer-auth-client`, то регистрировать нужно с именем `customer-auth-client`.
 

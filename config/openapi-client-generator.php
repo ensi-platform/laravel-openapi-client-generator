@@ -32,18 +32,20 @@ return [
      */
     'js_args' => [
         /**
-         * Specific generator params from https://openapi-generator.tech/docs/generators/typescript-axios/
+         * Specific generator params from https://openapi-generator.tech/docs/generators/typescript-fetch/
          */
         'params' => [
             'npmName' => '<paste_your_npm_package_name>',
             'useES6' => true,
             'useSingleRequestParameter' => true,
             'withInterfaces' => true,
-            'withSeparateModelsAndApi' => true,
             'typescriptThreePlus' => true,
-            'apiPackage' => 'api',
-            'modelPackage' => 'dto'
-        ]
+        ],
+
+        /**
+         * Need generate nest js module, only for backend services
+         */
+        'generate_nestjs_module' => false
     ],
 
     /**

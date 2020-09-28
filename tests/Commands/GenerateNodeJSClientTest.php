@@ -22,11 +22,9 @@ class GenerateNodeJSClientTest extends TestCase
             'useES6' => true,
             'useSingleRequestParameter' => true,
             'withInterfaces' => true,
-            'withSeparateModelsAndApi' => true,
             'typescriptThreePlus' => true,
-            'apiPackage' => 'api',
-            'modelPackage' => 'dto'
         ]);
+        $app['config']->set('openapi-client-generator.js_args.generate_nestjs_module', true);
     }
 
     protected function getPackageProviders($app)
