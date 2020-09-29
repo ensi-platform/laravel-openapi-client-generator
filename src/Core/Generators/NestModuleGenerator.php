@@ -14,7 +14,7 @@ class NestModuleGenerator {
     /**
      * @var string
      */
-    private $packageDir;
+    private $sourceDir;
 
     /**
      * @var string
@@ -24,13 +24,13 @@ class NestModuleGenerator {
     /**
      * @var string
      */
-    private $apiPackage;
+    private $apisDir;
 
-    public function __construct(string $packageDir, string $packageName, string $apiPackage)
+    public function __construct(string $sourceDir, string $packageName, string $apisDir)
     {
-        $this->packageDir = $packageDir;
+        $this->sourceDir = $sourceDir;
         $this->packageName = $packageName;
-        $this->apiPackage = $apiPackage;
+        $this->apisDir = $apisDir;
     }
 
     public function generate(): void
@@ -39,7 +39,6 @@ class NestModuleGenerator {
         $this->generateModuleFile();
         $this->generateConfigFile();
         $this->generateIndexFile();
-        $this->patchMainIndexFile();
     }
 
     private function createModuleDir(): void
@@ -59,30 +58,8 @@ class NestModuleGenerator {
 
     private function generateConfigFile(): void
     {
-        $configName = $this->getConfigName();
-        $className = $this->getClassName();
-        $content = <<<EOD
-        import { Injectable } from '@nestjs/common';
-        import { ConfigService } from '@nestjs/config';
-
-        import { AxiosRequestConfig } from 'axios';
-
-        @Injectable()
-        export class ${className}Config {
-            constructor(private readonly configService: ConfigService) {}
-
-            get uri(): string {
-                return this.configService.get('${configName}.uri');
-            }
-
-            get options(): AxiosRequestConfig | undefined {
-                return this.configService.get('${configName}.options', undefined);
-            }
-        }
-
-        EOD;
-
-        file_put_contents($this->getPathToModuleFile(self::CONFIG_FILENAME), $content);
+        $generator = new NestModuleConfigGenerator($this->getPathToModuleDir(), $this->packageName);
+        $generator->generate();
     }
 
     private function generateIndexFile(): void
@@ -90,25 +67,15 @@ class NestModuleGenerator {
         $content = collect([ self::CONFIG_FILENAME, self::MODULE_FILENAME ])
             ->map(function (string $file) {
                 $name = basename($file, '.ts');
-                return "export * from \"./$name\";";
+                return "export * from './$name';";
             })
             ->join("\n");
         file_put_contents($this->getPathToModuleFile(self::INDEX_FILENAME), $content);
     }
 
-    private function patchMainIndexFile(): void
-    {
-        $moduleImport = self::MODULE_DIRNAME;
-        $indexFile = $this->packageDir . DIRECTORY_SEPARATOR . self::INDEX_FILENAME;
-
-        $content = file_get_contents($indexFile);
-        $content .= "export * from \"./$moduleImport\";\n";
-        file_put_contents($indexFile, $content);
-    }
-
     private function getPathToModuleDir(): string
     {
-        return $this->packageDir . DIRECTORY_SEPARATOR . self::MODULE_DIRNAME;
+        return $this->sourceDir . DIRECTORY_SEPARATOR . self::MODULE_DIRNAME;
     }
 
     private function getPathToModuleFile(string $moduleFile): string
@@ -129,13 +96,13 @@ class NestModuleGenerator {
     private function getServices()
     {
         $services = new FilesystemIterator(
-            $this->packageDir . DIRECTORY_SEPARATOR . $this->apiPackage,
+            $this->apisDir,
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
         );
 
-        return collect($services)->map(fn($service) =>
-            Str::ucfirst(Str::of($service->getBasename('.ts'))->camel())
-        );
+        return collect($services)
+            ->map(fn($service) => Str::ucfirst(Str::of($service->getBasename('.ts'))->camel()))
+            ->filter(fn($service) => $service != 'Index');
     }
 
     private function getModuleFileImports(): string
@@ -144,16 +111,17 @@ class NestModuleGenerator {
         $className = $this->getClassName();
 
         $servicesImport = $services->join(', ');
+
         $configImport = basename(self::CONFIG_FILENAME, '.ts');
+        $apisImport = basename($this->apisDir);
 
         return <<<EOD
-        import axios from 'axios';
+        import { Module } from '@nestjs/common';
 
-        import { Module, HttpException, HttpStatus } from '@nestjs/common';
+        import { Configuration } from '../runtime';
+        import { $servicesImport } from '../$apisImport';
 
-        import { $servicesImport } from "../$this->apiPackage";
-
-        import { ${className}Config } from "./$configImport";
+        import { ${className}Config } from './$configImport';
 
 
         EOD;
@@ -194,27 +162,8 @@ class NestModuleGenerator {
                     {
                         provide: $service,
                         useFactory: (config: ${className}Config): $service => {
-                            const client = axios.create();
-
-                            client.interceptors.response.use(
-                                response => response,
-                                error => {
-                                    if (error.response) {
-                                        throw new HttpException(error.response.data, error.response.status)
-                                    } else {
-                                        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
-                                    }
-                                }
-                            );
-
-                            return new $service(
-                                {
-                                    basePath: config.uri,
-                                    baseOptions: config.options
-                                },
-                                null,
-                                client
-                            );
+                            const configuration = new Configuration(config);
+                            return new $service(configuration);
                         },
                         inject: [ ${className}Config ]
                     },

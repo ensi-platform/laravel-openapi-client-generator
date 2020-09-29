@@ -28,10 +28,19 @@ Filter:
   name: filter
   required: false
   description: Фильтры
+  style: deepObject
   schema:
-    type: array
-    items:
-      type: object
+    type: object
+    properties:
+      roles:
+        type: array
+        items:
+          type: integer
+      status:
+        type: string
+    required:
+      - roles
+      - status
 Include:
   in: query
   name: include

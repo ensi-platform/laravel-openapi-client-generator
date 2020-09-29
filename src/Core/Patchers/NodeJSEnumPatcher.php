@@ -47,7 +47,7 @@ class NodeJSEnumPatcher extends EnumPatcher {
 
     private function toSnakeCase(string $str): string
     {
-        return strtolower(preg_replace('/-/', '_', $str));
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $str));
     }
 
     private function getEnumPropertyName(string $name): string
