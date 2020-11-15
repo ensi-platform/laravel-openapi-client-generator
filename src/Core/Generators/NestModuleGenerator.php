@@ -101,8 +101,12 @@ class NestModuleGenerator {
         );
 
         return collect($services)
-            ->map(fn($service) => Str::ucfirst(Str::of($service->getBasename('.ts'))->camel()))
-            ->filter(fn($service) => $service != 'Index');
+            ->map(function ($service) { 
+                return Str::ucfirst(Str::of($service->getBasename('.ts'))->camel()); 
+            })
+            ->filter(function ($service) { 
+                return $service !== 'Index'; 
+            });
     }
 
     private function getModuleFileImports(): string

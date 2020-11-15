@@ -54,7 +54,9 @@ class LaravelServiceProviderGenerator {
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
         );
 
-        return collect($services)->map(fn($service) => $service->getBasename('.php'));
+        return collect($services)->map(function ($service) {
+            return $service->getBasename('.php');
+        });
     }
 
     private function getServiceProviderFile($services)
