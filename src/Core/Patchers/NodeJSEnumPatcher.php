@@ -6,11 +6,6 @@ use Illuminate\Support\Str;
 
 class NodeJSEnumPatcher extends EnumPatcher {
 
-    public function __construct(string $enumFile, string $apidocDir)
-    {
-        parent::__construct($enumFile, $apidocDir);
-    }
-
     protected function getSpecificationName(): string
     {
         return $this->toSnakeCase(basename($this->enumFile, '.ts'));
