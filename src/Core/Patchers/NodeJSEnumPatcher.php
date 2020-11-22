@@ -18,6 +18,10 @@ class NodeJSEnumPatcher extends EnumPatcher {
 
     protected function patchEnumFile(array $constants): void
     {
+        if (!file_exists($this->enumFile)) {
+            return;
+        }
+
         $enum = file_get_contents($this->enumFile);
 
         if ($constants !== null) {
