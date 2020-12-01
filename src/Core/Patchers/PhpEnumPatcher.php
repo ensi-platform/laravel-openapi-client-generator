@@ -6,6 +6,11 @@ use Illuminate\Support\Str;
 
 class PhpEnumPatcher extends EnumPatcher {
 
+    public function __construct(string $enumFile, string $apidocDir)
+    {
+        parent::__construct($enumFile, $apidocDir);
+    }
+
     protected function getSpecificationName(): string
     {
         return $this->toSnakeCase(basename($this->enumFile, '.php'));
@@ -13,10 +18,6 @@ class PhpEnumPatcher extends EnumPatcher {
 
     protected function patchEnumFile(array $constants): void
     {
-        if (!file_exists($this->enumFile)) {
-            return;
-        }
-
         $enum = file_get_contents($this->enumFile);
 
         if ($constants !== null) {
