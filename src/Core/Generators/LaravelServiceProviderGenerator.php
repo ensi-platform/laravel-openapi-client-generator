@@ -50,7 +50,7 @@ class LaravelServiceProviderGenerator {
     private function getServices()
     {
         $services = new FilesystemIterator(
-            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage,
+            "$this->packageDir/lib/$this->apiPackage",
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
         );
 
@@ -80,7 +80,7 @@ class LaravelServiceProviderGenerator {
     {
         $printer = new PsrPrinter();
         $serviceProviderName = $this->getServiceProviderName();
-        file_put_contents($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php", $printer->printFile($file));
+        file_put_contents("$this->packageDir/lib/$serviceProviderName.php", $printer->printFile($file));
     }
 
     private function addUse($namespace, $services): void

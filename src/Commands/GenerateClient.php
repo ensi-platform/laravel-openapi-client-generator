@@ -79,12 +79,9 @@ abstract class GenerateClient extends Command {
     private function generateClientPackage(): void
     {
         $bin = 'npx @openapitools/openapi-generator-cli';
-        $i = escapeshellarg($this->apidocDir . DIRECTORY_SEPARATOR . "index.yaml");
-        $g = escapeshellarg($this->generator);
-        $o = escapeshellarg($this->outputDir);
-        $command = "$bin generate -i $i -g $g -o $o " . $this->getGeneratorArguments();
+        $command = "$bin generate -i $this->apidocDir/index.yaml -g $this->generator -o $this->outputDir " . $this->getGeneratorArguments();
 
-        $this->info("Generating $this->client client by command: $command");
+        $this->info("Generate $this->client client by command: $command");
 
         shell_exec($command);
     }
@@ -94,21 +91,21 @@ abstract class GenerateClient extends Command {
         $arguments = '';
 
         if (Str::length($this->gitUser) > 0) {
-            $arguments .= " --git-user-id " . escapeshellarg($this->gitUser);
+            $arguments .= " --git-user-id $this->gitUser";
         }
 
         if (Str::length($this->gitRepo) > 0) {
-            $arguments .= " --git-repo-id " . escapeshellarg($this->gitRepo);
+            $arguments .= " --git-repo-id $this->gitRepo";
         }
 
         if (Str::length($this->gitHost) > 0) {
-            $arguments .= " --git-host " . escapeshellarg($this->gitHost);
+            $arguments .= " --git-host $this->gitHost";
         }
 
         $additionalParams = $this->getAdditionalParamsArgument();
 
         if (Str::length($additionalParams) > 0) {
-            $arguments .= " -p " . escapeshellarg($additionalParams);
+            $arguments .= " -p \"$additionalParams\"";
         }
 
         return $arguments;
@@ -118,7 +115,8 @@ abstract class GenerateClient extends Command {
     {
         return collect($this->params)
             ->map(function ($value, $name) {
-                return "$name=$value";
+                $stringValue = var_export($value, true);
+                return "$name=$stringValue";
             })
             ->join(',');
     }

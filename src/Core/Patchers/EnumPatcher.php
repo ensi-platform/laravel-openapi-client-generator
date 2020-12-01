@@ -21,10 +21,7 @@ abstract class EnumPatcher {
     }
 
     public function patch(): void {
-        $specificationFile = $this->apidocDir . DIRECTORY_SEPARATOR . $this->getSpecificationName() . '.yaml';
-        if (!file_exists($specificationFile)) {
-            return;
-        }
+        $specificationFile = "$this->apidocDir/" . $this->getSpecificationName() . '.yaml';
 
         $constants = $this->getConstantsFromSpecification($specificationFile);
 
