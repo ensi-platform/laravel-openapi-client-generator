@@ -27,7 +27,7 @@ C enum есть 2 проблемы
 2. При числовых перечисления класс генерируется с синтаксической ошибкой https://github.com/OpenAPITools/openapi-generator/issues/1475
 
 Для решения этих проблем
-1. Под каждый enum создаём файл с названием {banana}_enum.yaml в директории public/api-docs/components/ (?)
+1. Под каждый enum создаём файл с названием {banana}_enum.yaml
 2. Содержимое файла должно быть следующего вида:  
 ```
 type: number
