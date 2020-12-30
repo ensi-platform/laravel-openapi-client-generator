@@ -72,6 +72,7 @@ abstract class GenerateClient extends Command {
         $this->generateClientPackage();
         $this->patchClientPackage();
         $this->copyLicenseToClientPackage();
+        $this->copyGitIgnoreToPackage();
     }
 
     protected abstract function patchClientPackage(): void;
@@ -126,9 +127,26 @@ abstract class GenerateClient extends Command {
 
     private function copyLicenseToClientPackage(): void
     {
-        $source = __DIR__ . collect(array_fill(0, 3, DIRECTORY_SEPARATOR))->join('..') . 'LICENSE.md';
+        $source = $this->templatePath('LICENSE-template.md');
         $dest = $this->outputDir . DIRECTORY_SEPARATOR . 'LICENSE.md';
+        if (!file_exists($dest)) {
+            copy($source, $dest);
+            $this->info("Template LICENSE.md copied to package");
+        }
+    }
 
-        copy($source, $dest);
+    private function copyGitIgnoreToPackage(): void
+    {
+        $source = $this->templatePath('template.gitignore');
+        $dest = $this->outputDir . DIRECTORY_SEPARATOR . '.gitignore';
+        if (!file_exists($dest)) {
+            copy($source, $dest);
+            $this->info("Template .gitignore copied to package");
+        }
+    }
+
+    protected function templatePath(string $path): string 
+    {
+        return __DIR__ . '/../../templates/' . ltrim($path, '/');
     }
 }
