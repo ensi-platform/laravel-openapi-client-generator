@@ -118,7 +118,8 @@ abstract class GenerateClient extends Command {
     {
         return collect($this->params)
             ->map(function ($value, $name) {
-                return "$name=$value";
+                $escapedValue = PHP_OS_FAMILY !== 'Windows' ? str_replace("\\", "\\\\", $value) : $value;
+                return "$name=$escapedValue";
             })
             ->join(',');
     }
