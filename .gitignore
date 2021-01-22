@@ -4,6 +4,7 @@ composer.lock
 npm-debug.log
 yarn-error.log
 .php_cs.cache
+composer.lock
 
 # IDEs #
 ###################
