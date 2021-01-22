@@ -45,7 +45,12 @@ return [
         /**
          * Need generate nest js module, only for backend services
          */
-        'generate_nestjs_module' => false
+        'generate_nestjs_module' => false,
+
+        /**
+         * Directory where you can place templates to override default ones. . Used in -t
+         */
+        'template_dir' => '',
     ],
 
     /**
@@ -65,6 +70,11 @@ return [
             'invokerPackage' => '<paste_your_php_package_namespace>',
             'modelPackage' => 'Dto',
             'packageName' => '<paste_your_php_package_name>'
-        ]
+        ],
+
+        /**
+         * Directory where you can place templates to override default ones. . Used in -t
+         */
+        'template_dir' => '',
     ]
 ];

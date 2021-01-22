@@ -48,6 +48,11 @@ abstract class GenerateClient extends Command {
      */
     protected $params;
 
+    /**
+     * @var string
+     */
+    protected $templateDir;
+
     public function __construct()
     {
         parent::__construct();
@@ -60,6 +65,7 @@ abstract class GenerateClient extends Command {
         $this->gitHost = config('openapi-client-generator.git_host', '');
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
+        $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
     }
 
     /**
@@ -72,7 +78,6 @@ abstract class GenerateClient extends Command {
         $this->generateClientPackage();
         $this->patchClientPackage();
         $this->copyLicenseToClientPackage();
-        $this->copyGitIgnoreToPackage();
     }
 
     protected abstract function patchClientPackage(): void;
@@ -105,6 +110,10 @@ abstract class GenerateClient extends Command {
         if (Str::length($this->gitHost) > 0) {
             $arguments .= " --git-host " . escapeshellarg($this->gitHost);
         }
+        
+        if (Str::length($this->templateDir) > 0) {
+            $arguments .= " -t " . escapeshellarg($this->templateDir);
+        }
 
         $additionalParams = $this->getAdditionalParamsArgument();
 
@@ -132,16 +141,6 @@ abstract class GenerateClient extends Command {
         if (!file_exists($dest)) {
             copy($source, $dest);
             $this->info("Template LICENSE.md copied to package");
-        }
-    }
-
-    private function copyGitIgnoreToPackage(): void
-    {
-        $source = $this->templatePath('template.gitignore');
-        $dest = $this->outputDir . DIRECTORY_SEPARATOR . '.gitignore';
-        if (!file_exists($dest)) {
-            copy($source, $dest);
-            $this->info("Template .gitignore copied to package");
         }
     }
 
