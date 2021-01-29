@@ -51,6 +51,11 @@ return [
          * Directory where you can place templates to override default ones. . Used in -t
          */
         'template_dir' => '',
+
+        /**
+         * Files that will be ignored during repository cleanup
+         */
+        'files_for_ignore' => 'paste_your_files_to_ignore_them',
     ],
 
     /**
@@ -76,5 +81,10 @@ return [
          * Directory where you can place templates to override default ones. . Used in -t
          */
         'template_dir' => '',
+
+        /**
+         * Files that will be ignored during repository cleanup
+         */
+        'files_for_ignore' => 'paste_your_files_to_ignore_them',
     ]
 ];

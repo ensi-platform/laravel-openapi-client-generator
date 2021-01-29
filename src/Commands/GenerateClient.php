@@ -5,7 +5,8 @@ namespace Greensight\LaravelOpenapiClientGenerator\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-abstract class GenerateClient extends Command {
+abstract class GenerateClient extends Command
+{
     /**
      * @var string
      * Client name: js or php, must be set in child classes
@@ -53,6 +54,11 @@ abstract class GenerateClient extends Command {
      */
     protected $templateDir;
 
+    /**
+     * @var array
+     */
+    protected $ignoredFiles;
+
     public function __construct()
     {
         parent::__construct();
@@ -66,6 +72,7 @@ abstract class GenerateClient extends Command {
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
         $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
+        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", '');
     }
 
     /**
@@ -75,6 +82,7 @@ abstract class GenerateClient extends Command {
      */
     public function handle()
     {
+        $this->recursiveClearDirectory($this->outputDir);
         $this->generateClientPackage();
         $this->patchClientPackage();
         $this->copyLicenseToClientPackage();
@@ -110,7 +118,7 @@ abstract class GenerateClient extends Command {
         if (Str::length($this->gitHost) > 0) {
             $arguments .= " --git-host " . escapeshellarg($this->gitHost);
         }
-        
+
         if (Str::length($this->templateDir) > 0) {
             $arguments .= " -t " . escapeshellarg($this->templateDir);
         }
@@ -144,8 +152,28 @@ abstract class GenerateClient extends Command {
         }
     }
 
-    protected function templatePath(string $path): string 
+    protected function templatePath(string $path): string
     {
         return __DIR__ . '/../../templates/' . ltrim($path, '/');
+    }
+
+    /**
+     * Очистка содержимого директории.
+     * @param $dir
+     */
+    private function recursiveClearDirectory($dir)
+    {
+        foreach (glob($dir . '/*') as $file) {
+            if (!in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
+                if (is_dir($file)) {
+                    $this->recursiveClearDirectory($file);
+                } else {
+                    unlink($file);
+                }
+            }
+        }
+        if ($dir != $this->outputDir) {
+            rmdir($dir);
+        }
     }
 }
