@@ -55,7 +55,7 @@ return [
         /**
          * Files that will be ignored during repository cleanup
          */
-        'files_for_ignore' => 'paste_your_files_to_ignore_them',
+        'files_for_ignore' => ['.git', '.gitignore'],
     ],
 
     /**
@@ -85,6 +85,6 @@ return [
         /**
          * Files that will be ignored during repository cleanup
          */
-        'files_for_ignore' => 'paste_your_files_to_ignore_them',
+        'files_for_ignore' => ['.git', '.gitignore'],
     ]
 ];
