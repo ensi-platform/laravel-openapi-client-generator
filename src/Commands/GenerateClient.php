@@ -72,7 +72,7 @@ abstract class GenerateClient extends Command
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
         $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
-        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", '');
+        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", []);
     }
 
     /**
@@ -163,6 +163,10 @@ abstract class GenerateClient extends Command
      */
     private function recursiveClearDirectory($dir)
     {
+        if (!$dir) {
+            return;
+        }
+
         foreach (glob($dir . '/*') as $file) {
             if (!in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
                 if (is_dir($file)) {
@@ -172,7 +176,7 @@ abstract class GenerateClient extends Command
                 }
             }
         }
-        if ($dir != $this->outputDir) {
+        if ($dir !== $this->outputDir) {
             rmdir($dir);
         }
     }
