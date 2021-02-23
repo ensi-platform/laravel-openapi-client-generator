@@ -72,7 +72,7 @@ abstract class GenerateClient extends Command
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
         $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
-        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", '');
+        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", []);
     }
 
     /**
@@ -157,22 +157,24 @@ abstract class GenerateClient extends Command
         return __DIR__ . '/../../templates/' . ltrim($path, '/');
     }
 
-    /**
-     * Очистка содержимого директории.
-     * @param $dir
-     */
-    private function recursiveClearDirectory($dir)
+    private function recursiveClearDirectory(string $dir, int $level = 0)
     {
-        foreach (glob($dir . '/*') as $file) {
-            if (!in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
-                if (is_dir($file)) {
-                    $this->recursiveClearDirectory($file);
-                } else {
-                    unlink($file);
-                }
+        if (!$dir) {
+            return;
+        }
+
+        foreach (glob($dir . "/{*,.[!.]*,..?*}", GLOB_BRACE) as $file) {
+            if ($level === 0 && in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
+                continue;
+            }
+            if (is_dir($file)) {
+                $this->recursiveClearDirectory($file, $level + 1);
+            } else {
+                unlink($file);
             }
         }
-        if ($dir != $this->outputDir) {
+
+        if ($level > 0) {
             rmdir($dir);
         }
     }

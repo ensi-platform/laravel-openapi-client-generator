@@ -39,3 +39,8 @@ composer.lock
 .vagrant
 ehthumbs.db
 Thumbs.db
+
+# tests
+openapitools.json
+.phpunit.result.cache
+build

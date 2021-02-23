@@ -5,11 +5,8 @@ namespace Greensight\LaravelOpenapiClientGenerator\Core\Generators;
 use FilesystemIterator;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PsrPrinter;
-use Illuminate\Support\Str;
 
 class LaravelServiceProviderGenerator {
-    CONST CONFIG_FILENAME = 'php-client-config.php';
-
     /**
      * @var string
      */
@@ -30,12 +27,18 @@ class LaravelServiceProviderGenerator {
      */
     private $apiPackage;
 
-    public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage)
+    /**
+     * @var string
+     */
+    private $laravelPackageConfigKey;
+
+    public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage, string $laravelPackageConfigKey)
     {
         $this->packageDir = $packageDir;
         $this->namespace = $namespace;
         $this->packageName = $packageName;
         $this->apiPackage = $apiPackage;
+        $this->laravelPackageConfigKey = $laravelPackageConfigKey;
     }
 
     public function generate(): void
@@ -68,8 +71,6 @@ class LaravelServiceProviderGenerator {
         $class = $namespace->addClass($this->getServiceProviderName());
         $class->setExtends('Illuminate\Support\ServiceProvider');
 
-        $class->addConstant('CONFIG_FILENAME', self::CONFIG_FILENAME);
-
         $this->addRegisterMethod($class, $services);
         $this->addBootMethod($class, $services);
 
@@ -99,10 +100,9 @@ class LaravelServiceProviderGenerator {
 
     private function addRegisterMethod($class, $services): void
     {
-        $config = $this->camelCaseToKebab($this->packageName);
+        $config = $this->laravelPackageConfigKey;
 
-        $body = "\$this->publishes([ __DIR__ . '/../../../config/' . self::CONFIG_FILENAME => config_path('$config.php') ]);";
-        $body .= "\n\n\$client = new Client(config('$config'));";
+        $body = "\$client = new Client(config('$config'));";
         $body .= "\n\n\$config = new Configuration();";
         $body .= "\n\$config->setHost(config('$config.base_uri'));\n";
 
@@ -118,8 +118,4 @@ class LaravelServiceProviderGenerator {
         return "{$this->packageName}ServiceProvider";
     }
 
-    private function camelCaseToKebab(string $string): string
-    {
-        return Str::of(Str::lower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '-$0', $string)))->ltrim('-');
-    }
 }
