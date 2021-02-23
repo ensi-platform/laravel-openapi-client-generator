@@ -57,7 +57,7 @@ abstract class GenerateClient extends Command
     /**
      * @var array
      */
-    protected $ignoredFiles;
+    protected $filesToIgnoreDuringCleanup;
 
     public function __construct()
     {
@@ -72,7 +72,7 @@ abstract class GenerateClient extends Command
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
         $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
-        $this->ignoredFiles = config("openapi-client-generator.{$this->client}_args.files_for_ignore", []);
+        $this->filesToIgnoreDuringCleanup = config("openapi-client-generator.{$this->client}_args.files_to_ignore_during_cleanup", []);
     }
 
     /**
@@ -164,7 +164,7 @@ abstract class GenerateClient extends Command
         }
 
         foreach (glob($dir . "/{*,.[!.]*,..?*}", GLOB_BRACE) as $file) {
-            if ($level === 0 && in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
+            if ($level === 0 && in_array(str_replace($this->outputDir . "/", "", $file), $this->filesToIgnoreDuringCleanup)) {
                 continue;
             }
             if (is_dir($file)) {

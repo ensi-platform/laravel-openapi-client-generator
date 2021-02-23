@@ -55,7 +55,7 @@ return [
         /**
          * Files that will be ignored during repository cleanup
          */
-        'files_for_ignore' => ['.git', '.gitignore'],
+        'files_to_ignore_during_cleanup' => ['.git', '.gitignore'],
     ],
 
     /**
@@ -90,6 +90,6 @@ return [
         /**
          * Files that will be ignored during repository cleanup
          */
-        'files_for_ignore' => ['.git', '.gitignore'],
+        'files_to_ignore_during_cleanup' => ['.git', '.gitignore'],
     ]
 ];
