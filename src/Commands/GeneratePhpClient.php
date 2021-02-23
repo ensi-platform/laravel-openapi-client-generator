@@ -10,6 +10,7 @@ use RegexIterator;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Generators\LaravelServiceProviderGenerator;
+use Illuminate\Support\Str;
 
 class GeneratePhpClient extends GenerateClient {
     /**
@@ -37,10 +38,16 @@ class GeneratePhpClient extends GenerateClient {
      */
     protected $composerName;
 
+    /**
+     * @var string
+     */
+    protected $laravelPackageConfigKey;
+
     public function __construct()
     {
         parent::__construct();
         $this->composerName = config('openapi-client-generator.php_args.composer_name');
+        $this->laravelPackageConfigKey = config("openapi-client-generator.{$this->client}_args.laravel_package_config_key", '');
     }
 
     protected function patchClientPackage(): void
@@ -82,9 +89,15 @@ class GeneratePhpClient extends GenerateClient {
             $this->outputDir,
             $this->params['invokerPackage'],
             $this->params['packageName'],
-            $this->params['apiPackage']
+            $this->params['apiPackage'],
+            $this->laravelPackageConfigKey ?: $this->camelCaseToKebab($this->params['packageName'])
         );
 
         $generator->generate();
+    }
+
+    private function camelCaseToKebab(string $string): string
+    {
+        return Str::of(Str::lower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '-$0', $string)))->ltrim('-');
     }
 }
