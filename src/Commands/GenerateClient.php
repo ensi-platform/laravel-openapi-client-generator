@@ -157,26 +157,24 @@ abstract class GenerateClient extends Command
         return __DIR__ . '/../../templates/' . ltrim($path, '/');
     }
 
-    /**
-     * Очистка содержимого директории.
-     * @param $dir
-     */
-    private function recursiveClearDirectory($dir)
+    private function recursiveClearDirectory(string $dir, int $level = 0)
     {
         if (!$dir) {
             return;
         }
 
-        foreach (glob($dir . '/*') as $file) {
-            if (!in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
-                if (is_dir($file)) {
-                    $this->recursiveClearDirectory($file);
-                } else {
-                    unlink($file);
-                }
+        foreach (glob($dir . "/{*,.[!.]*,..?*}", GLOB_BRACE) as $file) {
+            if ($level === 0 && in_array(str_replace($this->outputDir . "/", "", $file), $this->ignoredFiles)) {
+                continue;
+            }
+            if (is_dir($file)) {
+                $this->recursiveClearDirectory($file, $level + 1);
+            } else {
+                unlink($file);
             }
         }
-        if ($dir !== $this->outputDir) {
+
+        if ($level > 0) {
             rmdir($dir);
         }
     }
