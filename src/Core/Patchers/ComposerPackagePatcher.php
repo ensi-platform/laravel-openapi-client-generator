@@ -37,7 +37,9 @@ class ComposerPackagePatcher extends PackageManifestPatcher {
 
     protected function patchRequire($manifest)
     {
-        $manifest['require']['laravel/framework'] = '^7.10';
+        $manifest['require']['php'] = '^7.1 || ^8';
+        $manifest['require']['laravel/framework'] = '^7 || ^8';
+        $manifest['require']['guzzlehttp/guzzle'] = '^6.2 || ^7.0';
         return $manifest;
     }
 }
