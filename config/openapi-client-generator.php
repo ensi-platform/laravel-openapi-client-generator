@@ -83,11 +83,6 @@ return [
         'template_dir' => '',
 
         /**
-         * Config key which generated Laravel packages uses to configure itself. For example `openapi-clients.crm`. Defaults to kebab-cased value of `params.invokerPackage` if is left blank.
-         */
-        'laravel_package_config_key' => '',
-
-        /**
          * Files that will be ignored during repository cleanup
          */
         'files_to_ignore_during_cleanup' => ['.git', '.gitignore'],
