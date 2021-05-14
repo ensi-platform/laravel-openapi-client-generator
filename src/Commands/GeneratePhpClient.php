@@ -9,6 +9,8 @@ use RegexIterator;
 
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Greensight\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
+use Illuminate\Support\Str;
 
 class GeneratePhpClient extends GenerateClient {
     /**
@@ -52,6 +54,7 @@ class GeneratePhpClient extends GenerateClient {
     {
         $this->patchEnums();
         $this->patchComposerPackage();
+        $this->generateProvider();
     }
 
     private function patchEnums(): void
@@ -79,5 +82,21 @@ class GeneratePhpClient extends GenerateClient {
     {
         $patcher = new ComposerPackagePatcher($this->outputDir, $this->composerName);
         $patcher->patch();
+    }
+
+    private function generateProvider(): void {
+        $generator = new PhpProviderGenerator(
+            $this->outputDir,
+            $this->params['invokerPackage'],
+            $this->params['packageName'],
+            $this->params['apiPackage'],
+        );
+
+        $generator->generate();
+    }
+
+    private function camelCaseToKebab(string $string): string
+    {
+        return Str::of(Str::lower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '-$0', $string)))->ltrim('-');
     }
 }
