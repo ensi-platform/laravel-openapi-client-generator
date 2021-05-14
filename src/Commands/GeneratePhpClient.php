@@ -10,7 +10,6 @@ use RegexIterator;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
 use Greensight\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
-use Illuminate\Support\Str;
 
 class GeneratePhpClient extends GenerateClient {
     /**
@@ -90,13 +89,9 @@ class GeneratePhpClient extends GenerateClient {
             $this->params['invokerPackage'],
             $this->params['packageName'],
             $this->params['apiPackage'],
+            $this->params['modelPackage'],
         );
 
         $generator->generate();
-    }
-
-    private function camelCaseToKebab(string $string): string
-    {
-        return Str::of(Str::lower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '-$0', $string)))->ltrim('-');
     }
 }

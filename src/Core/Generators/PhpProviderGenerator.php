@@ -3,6 +3,7 @@
 namespace Greensight\LaravelOpenapiClientGenerator\Core\Generators;
 
 use FilesystemIterator;
+use Illuminate\Support\Collection;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PsrPrinter;
 
@@ -28,28 +29,32 @@ class PhpProviderGenerator
     */
    private $apiPackage;
 
+   /**
+    * @var string
+    */
+    private $modelPackage;
 
-   public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage)
+
+   public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage, string $modelPackage)
    {
       $this->packageDir = $packageDir;
       $this->namespace = $namespace;
       $this->packageName = $packageName;
       $this->apiPackage = $apiPackage;
+      $this->modelPackage = $modelPackage;
    }
 
    public function generate(): void
    {
-      $apis = $this->getApis();
-
-      $file = $this->getProviderFile($apis);
+      $file = $this->getProviderFile();
 
       $this->saveProviderFile($file);
    }
 
-   private function getApis()
+   private function getClassesFromDirectory(string $directory)
    {
       $apis = new FilesystemIterator(
-         $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage,
+         $directory,
          FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
       );
 
@@ -58,46 +63,58 @@ class PhpProviderGenerator
       });
    }
 
-   private function getProviderFile($apiClassNames)
+   private function getProviderFile()
    {
       $file = new PhpFile();
       $namespace = $file->addNamespace($this->namespace);
-      $this->addUse($namespace, $apiClassNames);
-
       $class = $namespace->addClass($this->getProviderName());
 
-      //   $this->addRegisterMethod($class, $apis);
+      $this->addApisToProviderClass($class);
+      $this->addDtosToProviderClass($class);
+      $this->addConfigurationToProviderClass($class);
 
-      $apiClassStrings = array_map(function ($className) {
-         return "$className::class";
-      }, $apiClassNames);
+      return $file;
+   }
 
-      $class->addProperty('apis', $apiClassStrings)
+   private function addApisToProviderClass($class) 
+   {
+      $apis = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage);
+      $apiClassStrings = $apis->map(function ($className) {
+         return "\\$this->namespace\\$this->apiPackage\\$className";
+      });
+
+      $class->addProperty('apis', $apiClassStrings->values()->all())
          ->setPublic()
          ->setStatic()
          ->addComment('@var string[]');
+   }
 
-      // $class->addProperty('configuration', $apiClassStrings)
-      //    ->setPublic()
-      //    ->setStatic()
-      //    ->addComment('@var string[]');
+   private function addDtosToProviderClass($class) 
+   {
+      $dtos = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->modelPackage);
+      $dtoClassStrings = $dtos->map(function ($className) {
+         return "\\$this->namespace\\$this->modelPackage\\$className";
+      });
 
-      return $file;
+      $class->addProperty('dtos', $dtoClassStrings->values()->all())
+         ->setPublic()
+         ->setStatic()
+         ->addComment('@var string[]');
+   }
+
+   private function addConfigurationToProviderClass($class) 
+   {
+      $class->addProperty('configuration', "\\$this->namespace\\Configuration")
+         ->setPublic()
+         ->setStatic()
+         ->addComment('@var string');
    }
 
    private function saveProviderFile($file)
    {
       $printer = new PsrPrinter();
       $serviceProviderName = $this->getProviderName();
-      dd($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php");
       file_put_contents($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php", $printer->printFile($file));
-   }
-
-   private function addUse($namespace, $apis): void
-   {
-      foreach ($apis as $api) {
-         $namespace->addUse("$this->namespace\\$this->apiPackage\\$api");
-      }
    }
 
    private function getProviderName(): string
