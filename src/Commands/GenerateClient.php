@@ -163,10 +163,16 @@ abstract class GenerateClient extends Command
             return;
         }
 
-        foreach (glob($dir . "/{*,.[!.]*,..?*}", GLOB_BRACE) as $file) {
-            if ($level === 0 && in_array(str_replace($this->outputDir . "/", "", $file), $this->filesToIgnoreDuringCleanup)) {
+        foreach (scandir($dir) as $fileWithoutDir) {
+            if (in_array($fileWithoutDir, ['..', '.'])) {
                 continue;
             }
+            $file = $dir . "/" . $fileWithoutDir;
+
+            if ($level === 0 && in_array($fileWithoutDir, $this->filesToIgnoreDuringCleanup)) {
+                continue;
+            }
+
             if (is_dir($file)) {
                 $this->recursiveClearDirectory($file, $level + 1);
             } else {
