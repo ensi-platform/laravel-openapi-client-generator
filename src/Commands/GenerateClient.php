@@ -144,17 +144,33 @@ abstract class GenerateClient extends Command
 
     private function copyLicenseToClientPackage(): void
     {
-        $source = $this->templatePath('LICENSE-template.md');
+        $internalSource = $this->internalTemplatePath('LICENSE-template.md');
+        $externalSource = $this->externalTemplatePath('LICENSE-template.md');
+        $source = !is_null($externalSource) && file_exists($externalSource) ? $externalSource : $internalSource;
+
         $dest = $this->outputDir . DIRECTORY_SEPARATOR . 'LICENSE.md';
-        if (!file_exists($dest)) {
+        if (!file_exists($dest) && file_exists($source)) {
             copy($source, $dest);
             $this->info("Template LICENSE.md copied to package");
         }
     }
 
-    protected function templatePath(string $path): string
+    protected function internalTemplatePath(string $path): string
     {
         return __DIR__ . '/../../templates/' . ltrim($path, '/');
+    }
+
+    protected function externalTemplatePath(string $path): ?string
+    {
+        $resultPath = null;
+
+        if ($this->templateDir) {
+            $resultPath = rtrim($this->templateDir, DIRECTORY_SEPARATOR)
+                . DIRECTORY_SEPARATOR
+                . ltrim($path, DIRECTORY_SEPARATOR);
+        }
+
+        return $resultPath;
     }
 
     private function recursiveClearDirectory(string $dir, int $level = 0)
