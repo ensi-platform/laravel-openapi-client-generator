@@ -89,7 +89,7 @@ class GeneratePhpClient extends GenerateClient {
             $this->params['invokerPackage'],
             $this->params['packageName'],
             $this->params['apiPackage'],
-            $this->params['modelPackage'],
+            $this->params['modelPackage']
         );
 
         $generator->generate();
