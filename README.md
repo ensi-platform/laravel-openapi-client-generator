@@ -10,6 +10,8 @@
 ## Установка:
 1. `composer require --dev greensight/laravel-openapi-client-generator`
 2. `php artisan vendor:publish --provider="Greensight\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider"` - копирует конфиг генератора в конфиги приложения
+3. измените, если требуется, настройки по умолчанию в конфигурационном файле
+   
 
 ## Запуск:
 1. Перед запуском убедиться, что структура описания апи соответствует [этим требованиям](https://github.com/greensight/laravel-openapi-client-generator/blob/master/docs/api_schema_requirements.md).
