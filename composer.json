@@ -11,6 +11,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2 || ^8.0",
+        "ext-json": "*",
         "nette/php-generator": "^3.5"
     },
     "autoload": {
