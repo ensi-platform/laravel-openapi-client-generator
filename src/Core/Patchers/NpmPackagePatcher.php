@@ -56,4 +56,11 @@ class NpmPackagePatcher extends PackageManifestPatcher {
         $packageJson['devDependencies']['reflect-metadata'] = '0.1.13';
         return $packageJson;
     }
+
+    private function patchLicense(array $manifest): array
+    {
+        $manifest['license'] = 'MIT';
+
+        return $manifest;
+    }
 }

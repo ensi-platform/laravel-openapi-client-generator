@@ -47,9 +47,4 @@ abstract class PackageManifestPatcher {
         return $this->packageRootDir . DIRECTORY_SEPARATOR . $this->manifestName;
     }
 
-    protected function patchLicense($manifest)
-    {
-        $manifest['license'] = 'MIT';
-        return $manifest;
-    }
 }
