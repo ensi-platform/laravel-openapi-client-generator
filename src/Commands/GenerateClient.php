@@ -77,20 +77,22 @@ abstract class GenerateClient extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
         $this->recursiveClearDirectory($this->outputDir);
-        $this->generateClientPackage();
+        if (self::FAILURE === $this->generateClientPackage()) {
+            return self::FAILURE;
+        }
         $this->patchClientPackage();
         $this->copyLicenseToClientPackage();
+
+        return self::SUCCESS;
     }
 
     protected abstract function patchClientPackage(): void;
 
-    private function generateClientPackage(): void
+    private function generateClientPackage(): int
     {
         $bin = 'npx @openapitools/openapi-generator-cli';
         $i = escapeshellarg($this->apidocDir . DIRECTORY_SEPARATOR . "index.yaml");
@@ -100,7 +102,9 @@ abstract class GenerateClient extends Command
 
         $this->info("Generating $this->client client by command: $command");
 
-        shell_exec($command);
+        exec($command, $output, $resultCode);
+
+        return $resultCode;
     }
 
     private function getGeneratorArguments(): string
