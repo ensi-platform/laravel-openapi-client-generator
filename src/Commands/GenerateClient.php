@@ -102,6 +102,8 @@ abstract class GenerateClient extends Command
 
         $this->info("Generating $this->client client by command: $command");
 
+        $output = null;
+        $resultCode = null;
         exec($command, $output, $resultCode);
 
         return $resultCode;
