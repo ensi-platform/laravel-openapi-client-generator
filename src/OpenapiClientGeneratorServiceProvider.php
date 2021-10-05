@@ -1,11 +1,11 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator;
+namespace Ensi\LaravelOpenapiClientGenerator;
 
 use Illuminate\Support\ServiceProvider;
 
-use Greensight\LaravelOpenapiClientGenerator\Commands\GenerateNodeJSClient;
-use Greensight\LaravelOpenapiClientGenerator\Commands\GeneratePhpClient;
+use Ensi\LaravelOpenapiClientGenerator\Commands\GenerateNodeJSClient;
+use Ensi\LaravelOpenapiClientGenerator\Commands\GeneratePhpClient;
 
 class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 {

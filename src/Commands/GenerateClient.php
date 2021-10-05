@@ -1,6 +1,6 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator\Commands;
+namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;

@@ -30,7 +30,7 @@ class GenerateNodeJSClientTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Greensight\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider'
+            'Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider'
         ];
     }
 

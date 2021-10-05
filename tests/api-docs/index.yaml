@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: Ашан. OMS. Получение токена
+  title: OMS. Получение токена
   contact:
-    url: https://greensight.pro/
+    url: https://ensi.tech/
   version: 1.0.0
 servers:
   - url: /api

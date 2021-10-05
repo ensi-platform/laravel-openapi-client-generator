@@ -1,6 +1,6 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator\Core\Patchers;
+namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
 class NpmPackagePatcher extends PackageManifestPatcher {
     CONST NESTJS_COMMON_PACKAGE_VERSION = '7.0.0';

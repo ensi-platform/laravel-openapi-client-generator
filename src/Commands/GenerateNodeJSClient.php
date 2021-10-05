@@ -1,19 +1,19 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator\Commands;
+namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
 
-use Greensight\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
-use Greensight\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
 
 class GenerateNodeJSClient extends GenerateClient {
     /**

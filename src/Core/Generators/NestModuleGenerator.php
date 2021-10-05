@@ -1,6 +1,6 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator\Core\Generators;
+namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
 use FilesystemIterator;
 use Illuminate\Support\Str;

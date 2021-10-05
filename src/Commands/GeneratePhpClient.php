@@ -1,15 +1,15 @@
 <?php
 
-namespace Greensight\LaravelOpenapiClientGenerator\Commands;
+namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
-use Greensight\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
-use Greensight\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 
 class GeneratePhpClient extends GenerateClient {
     /**

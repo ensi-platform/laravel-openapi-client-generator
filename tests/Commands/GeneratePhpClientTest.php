@@ -23,13 +23,13 @@ class GeneratePhpClientTest extends TestCase
             'modelPackage' => 'Dto',
             'packageName' => 'OpenapiClientPHPExample'
         ]);
-        $app['config']->set('openapi-client-generator.php_args.composer_name', 'greensight/openapi-client-php-example');
+        $app['config']->set('openapi-client-generator.php_args.composer_name', 'ensi/openapi-client-php-example');
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            'Greensight\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider'
+            'Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider'
         ];
     }
 

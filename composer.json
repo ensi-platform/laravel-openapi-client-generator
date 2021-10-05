@@ -1,11 +1,11 @@
 {
-    "name": "greensight/laravel-openapi-client-generator",
+    "name": "ensi/laravel-openapi-client-generator",
     "description": "",
     "type": "library",
     "authors": [
       {
         "name": "Nikita Kutselay",
-        "email": "kutselaj@greensight.ru"
+        "email": "kutselaj@ensi.ru"
       }
     ],
     "license": "MIT",
