@@ -4,8 +4,8 @@
     "type": "library",
     "authors": [
       {
-        "name": "Nikita Kutselay",
-        "email": "kutselaj@ensi.ru"
+        "name": "Ilya Nekrasov",
+        "email": "nekrasov@greensight.ru"
       }
     ],
     "license": "MIT",
@@ -16,7 +16,7 @@
     },
     "autoload": {
       "psr-4": {
-        "Greensight\\LaravelOpenapiClientGenerator\\": "src/"
+        "Ensi\\LaravelOpenapiClientGenerator\\": "src/"
       }
     },
     "require-dev": {
@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Greensight\\LaravelOpenapiClientGenerator\\OpenapiClientGeneratorServiceProvider"
+                "Ensi\\LaravelOpenapiClientGenerator\\OpenapiClientGeneratorServiceProvider"
             ]
         }
     },
