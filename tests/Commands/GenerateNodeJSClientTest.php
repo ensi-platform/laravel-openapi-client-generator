@@ -1,5 +1,6 @@
 <?php
 
+use Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 class GenerateNodeJSClientTest extends TestCase
@@ -30,7 +31,7 @@ class GenerateNodeJSClientTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider'
+            OpenapiClientGeneratorServiceProvider::class
         ];
     }
 
