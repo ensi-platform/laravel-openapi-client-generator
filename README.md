@@ -20,7 +20,7 @@
 
 3. Генерация клиента:
     * [nodejs](docs/nodejs_client_requirements.md)
-    * [php]docs/php_client_requirements.md)
+    * [php](docs/php_client_requirements.md)
 
 4. После успешной генерации по пути `<output_dir_template>-js|php` для nodejs и php соответственно появится код клиента, который можно запушить в git, в корне будет лежать скрипт git_push который удобно использовать для этого. Соответствующие репозитории должны быть уже созданы в соответствующей системе контроля версий. Полное название репозитория формируется так: `<git_user>/<git_repo_template>-js|php` для nodejs и php соответственно.
 
