@@ -14,13 +14,13 @@
    
 
 ## Запуск:
-1. Перед запуском убедиться, что структура описания апи соответствует [этим требованиям](https://github.com/ensi/laravel-openapi-client-generator/blob/master/docs/api_schema_requirements.md).
+1. Перед запуском убедиться, что структура описания апи соответствует [этим требованиям](docs/api_schema_requirements.md).
 
 2. Настроить параметры генерации для соответствующих платформ (если дефолтные не подходят).
 
 3. Генерация клиента:
-    * [nodejs](https://github.com/ensi/laravel-openapi-client-generator/blob/master/docs/nodejs_client_requirements.md)
-    * [php](https://github.com/ensi/laravel-openapi-client-generator/blob/master/docs/php_client_requirements.md)
+    * [nodejs](docs/nodejs_client_requirements.md)
+    * [php]docs/php_client_requirements.md)
 
 4. После успешной генерации по пути `<output_dir_template>-js|php` для nodejs и php соответственно появится код клиента, который можно запушить в git, в корне будет лежать скрипт git_push который удобно использовать для этого. Соответствующие репозитории должны быть уже созданы в соответствующей системе контроля версий. Полное название репозитория формируется так: `<git_user>/<git_repo_template>-js|php` для nodejs и php соответственно.
 
