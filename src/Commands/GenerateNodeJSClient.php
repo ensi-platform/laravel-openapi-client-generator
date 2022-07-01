@@ -15,7 +15,8 @@ use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
 
-class GenerateNodeJSClient extends GenerateClient {
+class GenerateNodeJSClient extends GenerateClient
+{
     /**
      * @var string
      */

@@ -2,12 +2,10 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class TypeScriptConfigPatcher extends PackageManifestPatcher {
+class TypeScriptConfigPatcher extends PackageManifestPatcher
+{
 
-    /**
-     * @var string
-     */
-    protected $manifestName = 'tsconfig.json';
+    protected string $manifestName = 'tsconfig.json';
 
     protected function applyPatchers($tsConfig)
     {

@@ -2,12 +2,10 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-abstract class PackageManifestPatcher {
+abstract class PackageManifestPatcher
+{
 
-    /**
-     * @var string
-     */
-    protected $manifestName;
+    protected string $manifestName;
 
     /**
      * @var string
@@ -19,7 +17,8 @@ abstract class PackageManifestPatcher {
         $this->packageRootDir = $packageRootDir;
     }
 
-    public function patch(): void {
+    public function patch(): void
+    {
         $manifest = $this->getManifest();
 
         $manifest = $this->applyPatchers($manifest);

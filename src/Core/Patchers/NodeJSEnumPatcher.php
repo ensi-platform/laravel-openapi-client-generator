@@ -4,7 +4,8 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
 use Illuminate\Support\Str;
 
-class NodeJSEnumPatcher extends EnumPatcher {
+class NodeJSEnumPatcher extends EnumPatcher
+{
 
     protected function getSpecificationName(): string
     {

@@ -50,6 +50,11 @@ abstract class GenerateClient extends Command
     protected $params;
 
     /**
+     * @var array
+     */
+    protected $globalParams;
+
+    /**
      * @var string
      */
     protected $templateDir;
@@ -71,6 +76,7 @@ abstract class GenerateClient extends Command
         $this->gitHost = config('openapi-client-generator.git_host', '');
 
         $this->params = config("openapi-client-generator.{$this->client}_args.params");
+        $this->globalParams = config("openapi-client-generator.{$this->client}_args.global_params", []);
         $this->templateDir = config("openapi-client-generator.{$this->client}_args.template_dir", '');
         $this->filesToIgnoreDuringCleanup = config("openapi-client-generator.{$this->client}_args.files_to_ignore_during_cleanup", []);
     }
@@ -129,18 +135,22 @@ abstract class GenerateClient extends Command
             $arguments .= " -t " . escapeshellarg($this->templateDir);
         }
 
-        $additionalParams = $this->getAdditionalParamsArgument();
-
+        $additionalParams = $this->getParamsArgument($this->params);
         if (Str::length($additionalParams) > 0) {
             $arguments .= " -p " . escapeshellarg($additionalParams);
+        }
+
+        $globalParams = $this->getParamsArgument($this->globalParams);
+        if (Str::length($globalParams) > 0) {
+            $arguments .= " --global-property=" . escapeshellarg($globalParams);
         }
 
         return $arguments;
     }
 
-    private function getAdditionalParamsArgument(): string
+    private function getParamsArgument(array $params): string
     {
-        return collect($this->params)
+        return collect($params)
             ->map(function ($value, $name) {
                 $escapedValue = PHP_OS_FAMILY !== 'Windows' ? str_replace("\\", "\\\\", $value) : $value;
                 return "$name=$escapedValue";
@@ -179,31 +189,36 @@ abstract class GenerateClient extends Command
         return $resultPath;
     }
 
-    private function recursiveClearDirectory(string $dir, int $level = 0)
+    private function recursiveClearDirectory(string $dir, int $level = 0, string $baseDir = ''): bool
     {
         if (!$dir) {
-            return;
+            return true;
         }
 
+        $disableDeleteDir = false;
         foreach (scandir($dir) as $fileWithoutDir) {
             if (in_array($fileWithoutDir, ['..', '.'])) {
                 continue;
             }
             $file = $dir . "/" . $fileWithoutDir;
+            $pathFromBase = $baseDir ? $baseDir . '/' . $fileWithoutDir : $fileWithoutDir;
 
-            if ($level === 0 && in_array($fileWithoutDir, $this->filesToIgnoreDuringCleanup)) {
+            if (in_array($pathFromBase, $this->filesToIgnoreDuringCleanup)) {
+                $disableDeleteDir = true;
                 continue;
             }
 
             if (is_dir($file)) {
-                $this->recursiveClearDirectory($file, $level + 1);
+                $disableDeleteDir = $this->recursiveClearDirectory($file, $level + 1, $pathFromBase) || $disableDeleteDir;
             } else {
                 unlink($file);
             }
         }
 
-        if ($level > 0) {
+        if ($level > 0 && !$disableDeleteDir) {
             rmdir($dir);
         }
+
+        return $disableDeleteDir;
     }
 }

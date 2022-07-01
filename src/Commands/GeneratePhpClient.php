@@ -11,7 +11,8 @@ use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 
-class GeneratePhpClient extends GenerateClient {
+class GeneratePhpClient extends GenerateClient
+{
     /**
      * @var string
      */
@@ -42,16 +43,11 @@ class GeneratePhpClient extends GenerateClient {
      */
     protected $laravelPackageConfigKey;
 
-    /** @var bool */
-    private $disableComposerPatchRequire;
-
     public function __construct()
     {
         parent::__construct();
         $this->composerName = config('openapi-client-generator.php_args.composer_name');
         $this->laravelPackageConfigKey = config("openapi-client-generator.{$this->client}_args.laravel_package_config_key", '');
-
-        $this->disableComposerPatchRequire = (bool) config('openapi-client-generator.php_args.composer_disable_patch_require', false);
     }
 
     protected function patchClientPackage(): void
@@ -85,9 +81,7 @@ class GeneratePhpClient extends GenerateClient {
     private function patchComposerPackage(): void
     {
         $patcher = new ComposerPackagePatcher($this->outputDir, $this->composerName);
-        $patcher
-            ->setDisableRequirePatching($this->disableComposerPatchRequire)
-            ->patch();
+        $patcher->patch();
     }
 
     private function generateProvider(): void {

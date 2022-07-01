@@ -2,7 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class NodeJSIndexFilePatcher {
+class NodeJSIndexFilePatcher
+{
     /**
      * @var string
      */

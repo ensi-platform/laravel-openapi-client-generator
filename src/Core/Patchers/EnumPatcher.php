@@ -2,7 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-abstract class EnumPatcher {
+abstract class EnumPatcher
+{
 
     /**
      * @var string
