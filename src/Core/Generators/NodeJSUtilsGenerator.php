@@ -2,7 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
-class NodeJSUtilsGenerator {
+class NodeJSUtilsGenerator
+{
     CONST UTILS_DIRNAME = 'utils';
     CONST QUERY_STRING_FILTER_WRAPPER_FILENAME = 'querystringFilterWrapper.ts';
     CONST INDEX_FILENAME = 'index.ts';

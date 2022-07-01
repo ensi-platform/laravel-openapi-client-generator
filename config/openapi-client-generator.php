@@ -78,6 +78,14 @@ return [
         ],
 
         /**
+         * Global Properties from https://openapi-generator.tech/docs/globals
+         */
+        'global_params' => [
+            'apiTests' => false,
+            'modelTests' => false,
+        ],
+
+        /**
          * Directory where you can place templates to override default ones. . Used in -t
          */
         'template_dir' => '',
@@ -86,10 +94,5 @@ return [
          * Files that will be ignored during repository cleanup
          */
         'files_to_ignore_during_cleanup' => ['.git', '.gitignore'],
-
-        /**
-         * Options for disable patch section "require" composer.json
-         */
-        'composer_disable_patch_require' => false,
     ]
 ];

@@ -2,16 +2,14 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class NpmPackagePatcher extends PackageManifestPatcher {
+class NpmPackagePatcher extends PackageManifestPatcher
+{
     CONST NESTJS_COMMON_PACKAGE_VERSION = '7.0.0';
     CONST NESTJS_CONFIG_PACKAGE_VERSION = '0.5.0';
     CONST RXJS_PACKAGE_VERSION = '6.5.4';
     CONST NODE_FETCH_PACKAGE_VERSION = '2.6.1';
 
-    /**
-     * @var string
-     */
-    protected $manifestName = 'package.json';
+    protected string $manifestName = 'package.json';
 
     /**
      * @var boolean

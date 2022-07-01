@@ -4,7 +4,8 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
 use Illuminate\Support\Str;
 
-class NestModuleConfigGenerator {
+class NestModuleConfigGenerator
+{
     CONST MODULE_DIRNAME = 'module';
     CONST MODULE_FILENAME = 'module.ts';
     CONST CONFIG_FILENAME = 'config.ts';
