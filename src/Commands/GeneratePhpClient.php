@@ -49,6 +49,7 @@ class GeneratePhpClient extends GenerateClient {
     {
         parent::__construct();
         $this->composerName = config('openapi-client-generator.php_args.composer_name');
+        $this->params = array_merge($this->params, ['composerName' => $this->composerName]);
         $this->laravelPackageConfigKey = config("openapi-client-generator.{$this->client}_args.laravel_package_config_key", '');
 
         $this->disableComposerPatchRequire = (bool) config('openapi-client-generator.php_args.composer_disable_patch_require', false);
