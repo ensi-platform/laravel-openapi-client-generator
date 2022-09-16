@@ -2,6 +2,7 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -58,6 +59,7 @@ class GeneratePhpClient extends GenerateClient {
     {
         $this->patchEnums();
         $this->patchComposerPackage();
+        $this->patchReadme();
         $this->generateProvider();
     }
 
@@ -100,5 +102,13 @@ class GeneratePhpClient extends GenerateClient {
         );
 
         $generator->generate();
+    }
+
+    private function patchReadme(): void
+    {
+        $this->info('Patch README.md');
+
+        $patcher = new ReadmePatcher($this->outputDir, $this->gitRepo, $this->gitUser, $this->composerName);
+        $patcher->patch();
     }
 }
