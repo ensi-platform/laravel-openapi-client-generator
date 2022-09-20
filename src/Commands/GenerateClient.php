@@ -185,6 +185,10 @@ abstract class GenerateClient extends Command
             return;
         }
 
+        if ($level === 0 && !is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
         foreach (scandir($dir) as $fileWithoutDir) {
             if (in_array($fileWithoutDir, ['..', '.'])) {
                 continue;
