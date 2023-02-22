@@ -27,14 +27,14 @@ class GeneratePhpClientTest extends TestCase
         $app['config']->set('openapi-client-generator.php_args.composer_name', 'ensi/openapi-client-php-example');
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             OpenapiClientGeneratorServiceProvider::class
         ];
     }
 
-    public function testPushAndPop()
+    public function testPushAndPop(): void
     {
         $code = $this->artisan('openapi:generate-client-php');
         $this->assertSame($code, 0);

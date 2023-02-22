@@ -28,14 +28,14 @@ class GenerateNodeJSClientTest extends TestCase
         $app['config']->set('openapi-client-generator.js_args.generate_nestjs_module', true);
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             OpenapiClientGeneratorServiceProvider::class
         ];
     }
 
-    public function testPushAndPop()
+    public function testPushAndPop(): void
     {
         $code = $this->artisan('openapi:generate-client-nodejs');
         $this->assertSame($code, 0);

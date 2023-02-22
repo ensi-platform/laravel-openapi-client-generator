@@ -2,7 +2,6 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
-use Generator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use RecursiveDirectoryIterator;
