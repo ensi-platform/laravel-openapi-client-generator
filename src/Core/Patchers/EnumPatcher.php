@@ -2,28 +2,28 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-abstract class EnumPatcher {
+use Exception;
 
-    /**
-     * @var string
-     */
-    protected $enumFile;
-
-    /**
-     * @var string
-     */
-    protected $apidocDir;
-
-    public function __construct(string $enumFile, string $apidocDir)
-    {
-        $this->enumFile = $enumFile;
-        $this->apidocDir = $apidocDir;
+abstract class EnumPatcher
+{
+    public function __construct(
+        protected string $enumFile,
+        protected array $enumsPathList,
+    ) {
     }
 
-    public function patch(): void {
-        $specificationFile = $this->apidocDir . DIRECTORY_SEPARATOR . $this->getSpecificationName() . '.yaml';
+    /** @throws Exception */
+    public function patch(): void
+    {
+        $specificationName = $this->getSpecificationName() . '.yaml';
+        if (!isset($this->enumsPathList[$specificationName])) {
+            throw new Exception("$specificationName not found in in enumsPathList");
+        }
+
+        $specificationFile = $this->enumsPathList[$specificationName] . DIRECTORY_SEPARATOR . $specificationName;
+
         if (!file_exists($specificationFile)) {
-            return;
+            throw new Exception("$specificationFile not exists");
         }
 
         $constants = $this->getConstantsFromSpecification($specificationFile);
@@ -35,7 +35,8 @@ abstract class EnumPatcher {
 
     protected abstract function patchEnumFile(array $constants): void;
 
-    protected function getConstantsFromSpecification(string $specification) {
+    protected function getConstantsFromSpecification(string $specification): array
+    {
         preg_match_all(
             '/\s-\s(?<value>[\d]+)\s#\s(?<name>[\w]+)\s\|\s(?<title>.+)/mu',
             file_get_contents($specification),

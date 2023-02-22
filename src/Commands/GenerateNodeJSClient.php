@@ -2,6 +2,7 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
+use Exception;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -16,30 +17,17 @@ use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
 
 class GenerateNodeJSClient extends GenerateClient {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $signature = 'openapi:generate-client-nodejs';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Generate nodejs http client from openapi spec files by OpenApi Generator';
 
-    /**
-     * @var string
-     */
-    protected $client = 'js';
+    protected string $client = 'js';
 
-    /**
-     * @var string
-     */
-    protected $generator = 'typescript-fetch';
+    protected string $generator = 'typescript-fetch';
 
-    /**
-     * @var string
-     */
-    protected $needGenerateNestJSModule;
+    protected string $needGenerateNestJSModule;
 
     public function __construct()
     {
@@ -71,10 +59,15 @@ class GenerateNodeJSClient extends GenerateClient {
         );
 
         foreach ($files as $file) {
-            $this->info("Patch enum: $file");
+            try {
+                $patcher = new NodeJSEnumPatcher($file, $this->enumsPathList);
+                $patcher->patch();
+            } catch (Exception) {
+                $this->info("Patch enum: $file\t[SKIP]");
+                continue;
+            }
 
-            $patcher = new NodeJSEnumPatcher($file, $this->apidocDir);
-            $patcher->patch();
+            $this->info("Patch enum: $file\t[OK]");
         }
     }
 

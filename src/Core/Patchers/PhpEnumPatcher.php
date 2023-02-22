@@ -4,8 +4,8 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
 use Illuminate\Support\Str;
 
-class PhpEnumPatcher extends EnumPatcher {
-
+class PhpEnumPatcher extends EnumPatcher
+{
     protected function getSpecificationName(): string
     {
         return $this->toSnakeCase(basename($this->enumFile, '.php'));
@@ -19,16 +19,13 @@ class PhpEnumPatcher extends EnumPatcher {
 
         $enum = file_get_contents($this->enumFile);
 
-        if ($constants !== null) {
-
-            foreach ($constants as $constant) {
-                $enum = $this->patchConstantProperties(
-                    $enum,
-                    $constant['value'],
-                    Str::upper($constant['name']),
-                    $constant['title']
-                );
-            }
+        foreach ($constants as $constant) {
+            $enum = $this->patchConstantProperties(
+                $enum,
+                $constant['value'],
+                Str::upper($constant['name']),
+                $constant['title']
+            );
         }
 
         file_put_contents($this->enumFile, $enum);
@@ -36,15 +33,17 @@ class PhpEnumPatcher extends EnumPatcher {
 
     private function patchConstantProperties(string $enum, string $value, string $name, string $title): string
     {
+        // Changing const to public const and adding comments to them
         $enum = preg_replace(
-            '/' . "const $value = $value;" .'/m',
-            "public const $name = $value; // $title",
+            '/' . "const $name = $value;" . '/m',
+            "\r\n\t/** $title */\r\n\tpublic const $name = $value;",
             $enum
         );
 
+        // Filling titles in getAllowableEnumValuesWithTitles methods
         $enum = preg_replace(
-            '/' . "self::$value," .  '/m',
-            "self::$name,",
+            '/' . "self::$name => ''," . '/m',
+            "self::$name => '$title',",
             $enum
         );
 

@@ -3,6 +3,7 @@
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
+use Exception;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -12,47 +13,37 @@ use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 
-class GeneratePhpClient extends GenerateClient {
-    /**
-     * @var string
-     */
+class GeneratePhpClient extends GenerateClient
+{
+    /** @var string */
     protected $signature = 'openapi:generate-client-php';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Generate php http client from openapi spec files by OpenApi Generator';
 
-     /**
-     * @var string
-     */
-    protected $client = 'php';
+    protected string $client = 'php';
 
-    /**
-     * @var string
-     */
-    protected $generator = 'php';
+    protected string $generator = 'php';
 
-    /**
-     * @var string
-     */
-    protected $composerName;
+    protected string $composerName;
 
-    /**
-     * @var string
-     */
-    protected $laravelPackageConfigKey;
+    protected string $laravelPackageConfigKey;
 
-    /** @var bool */
-    private $disableComposerPatchRequire;
+    private bool $disableComposerPatchRequire;
 
     public function __construct()
     {
         parent::__construct();
         $this->composerName = config('openapi-client-generator.php_args.composer_name');
-        $this->laravelPackageConfigKey = config("openapi-client-generator.{$this->client}_args.laravel_package_config_key", '');
+        $this->laravelPackageConfigKey = config(
+            "openapi-client-generator.{$this->client}_args.laravel_package_config_key",
+            ''
+        );
 
-        $this->disableComposerPatchRequire = (bool) config('openapi-client-generator.php_args.composer_disable_patch_require', false);
+        $this->disableComposerPatchRequire = (bool)config(
+            'openapi-client-generator.php_args.composer_disable_patch_require',
+            false
+        );
     }
 
     protected function patchClientPackage(): void
@@ -77,10 +68,15 @@ class GeneratePhpClient extends GenerateClient {
         );
 
         foreach ($files as $file) {
-            $this->info("Patch enum: $file");
+            try {
+                $patcher = new PhpEnumPatcher($file, $this->enumsPathList);
+                $patcher->patch();
+            } catch (Exception) {
+                $this->info("Patch enum: $file\t[SKIP]");
+                continue;
+            }
 
-            $patcher = new PhpEnumPatcher($file, $this->apidocDir);
-            $patcher->patch();
+            $this->info("Patch enum: $file\t[OK]");
         }
     }
 
@@ -92,7 +88,8 @@ class GeneratePhpClient extends GenerateClient {
             ->patch();
     }
 
-    private function generateProvider(): void {
+    private function generateProvider(): void
+    {
         $generator = new PhpProviderGenerator(
             $this->outputDir,
             $this->params['invokerPackage'],
