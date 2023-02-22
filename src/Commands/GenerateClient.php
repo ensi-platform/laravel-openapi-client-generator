@@ -192,18 +192,15 @@ abstract class GenerateClient extends Command
 
     private function makeEnumsPathList(string $path): void
     {
+        $enums = new RegexIterator(
+            new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)),
+            '/\_enum.yaml$/',
+            RegexIterator::MATCH
+        );
+
         /* @var $file SplFileObject */
-        foreach ($this->enumsListGenerator($path) as $file) {
+        foreach ($enums as $file) {
            $this->enumsPathList[$file->getFilename()] = $file->getPath();
         }
-    }
-
-    private function enumsListGenerator(string $path): Generator
-    {
-        $iterator = new RecursiveDirectoryIterator($path);
-        $iterator = new RecursiveIteratorIterator($iterator);
-        $iterator = new RegexIterator($iterator, '/\_enum.yaml$/', RegexIterator::MATCH);
-
-        yield from $iterator;
     }
 }
