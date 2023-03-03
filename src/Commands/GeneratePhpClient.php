@@ -8,7 +8,6 @@ use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
 use Exception;
 use FilesystemIterator;
-
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;

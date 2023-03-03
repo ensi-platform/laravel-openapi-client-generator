@@ -3,43 +3,19 @@
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
 use FilesystemIterator;
+use Illuminate\Support\Collection;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PsrPrinter;
 
 class PhpProviderGenerator
 {
-    /**
-     * @var string
-     */
-    private $packageDir;
-
-    /**
-     * @var string
-     */
-    private $namespace;
-
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    /**
-     * @var string
-     */
-    private $apiPackage;
-
-    /**
-     * @var string
-     */
-    private $modelPackage;
-
-    public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage, string $modelPackage)
-    {
-        $this->packageDir = $packageDir;
-        $this->namespace = $namespace;
-        $this->packageName = $packageName;
-        $this->apiPackage = $apiPackage;
-        $this->modelPackage = $modelPackage;
+    public function __construct(
+        private readonly string $packageDir,
+        private readonly string $namespace,
+        private readonly string $packageName,
+        private readonly string $apiPackage,
+        private readonly string $modelPackage,
+    ) {
     }
 
     public function generate(): void
@@ -49,7 +25,7 @@ class PhpProviderGenerator
         $this->saveProviderFile($file);
     }
 
-    private function getClassesFromDirectory(string $directory)
+    private function getClassesFromDirectory(string $directory): Collection
     {
         $apis = new FilesystemIterator(
             $directory,
@@ -61,7 +37,7 @@ class PhpProviderGenerator
         });
     }
 
-    private function getProviderFile()
+    private function getProviderFile(): PhpFile
     {
         $file = new PhpFile();
         $namespace = $file->addNamespace($this->namespace);
@@ -74,9 +50,11 @@ class PhpProviderGenerator
         return $file;
     }
 
-    private function addApisToProviderClass($class)
+    private function addApisToProviderClass($class): void
     {
-        $apis = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage);
+        $apis = $this->getClassesFromDirectory(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage
+        );
         $apiClassStrings = $apis->map(function ($className) {
             return "\\$this->namespace\\$this->apiPackage\\$className";
         });
@@ -87,9 +65,11 @@ class PhpProviderGenerator
             ->addComment('@var string[]');
     }
 
-    private function addDtosToProviderClass($class)
+    private function addDtosToProviderClass($class): void
     {
-        $dtos = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->modelPackage);
+        $dtos = $this->getClassesFromDirectory(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->modelPackage
+        );
         $dtoClassStrings = $dtos->map(function ($className) {
             return "\\$this->namespace\\$this->modelPackage\\$className";
         });
@@ -100,7 +80,7 @@ class PhpProviderGenerator
             ->addComment('@var string[]');
     }
 
-    private function addConfigurationToProviderClass($class)
+    private function addConfigurationToProviderClass($class): void
     {
         $class->addProperty('configuration', "\\$this->namespace\\Configuration")
             ->setPublic()
@@ -108,11 +88,14 @@ class PhpProviderGenerator
             ->addComment('@var string');
     }
 
-    private function saveProviderFile($file)
+    private function saveProviderFile($file): void
     {
         $printer = new PsrPrinter();
         $serviceProviderName = $this->getProviderName();
-        file_put_contents($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php", $printer->printFile($file));
+        file_put_contents(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php",
+            $printer->printFile($file)
+        );
     }
 
     private function getProviderName(): string

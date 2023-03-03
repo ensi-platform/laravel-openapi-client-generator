@@ -3,18 +3,15 @@
 namespace Ensi\LaravelOpenapiClientGenerator;
 
 use Ensi\LaravelOpenapiClientGenerator\Commands\GenerateNodeJSClient;
-
 use Ensi\LaravelOpenapiClientGenerator\Commands\GeneratePhpClient;
 use Illuminate\Support\ServiceProvider;
 
 class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 {
-    const CONFIG_FILE_NAME = 'openapi-client-generator.php';
+    private const CONFIG_FILE_NAME = 'openapi-client-generator.php';
 
-    /**
-     * @return void
-     */
-    public function register()
+
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/' . self::CONFIG_FILE_NAME,
@@ -22,10 +19,7 @@ class OpenapiClientGeneratorServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__ . '/../config/' . self::CONFIG_FILE_NAME => config_path(self::CONFIG_FILE_NAME),
