@@ -8,25 +8,17 @@ abstract class EnumPatcher
 {
     public function __construct(
         protected string $enumFile,
-        protected array $enumsPathList,
     ) {
     }
 
     /** @throws Exception */
     public function patch(): void
     {
-        $specificationName = $this->getSpecificationName() . '.yaml';
-        if (!isset($this->enumsPathList[$specificationName])) {
-            throw new Exception("$specificationName not found in in enumsPathList");
+        if (!file_exists($this->enumFile)) {
+            throw new Exception("$this->enumFile not exists");
         }
 
-        $specificationFile = $this->enumsPathList[$specificationName] . DIRECTORY_SEPARATOR . $specificationName;
-
-        if (!file_exists($specificationFile)) {
-            throw new Exception("$specificationFile not exists");
-        }
-
-        $constants = $this->getConstantsFromSpecification($specificationFile);
+        $constants = $this->getConstantsFromSpecification($this->enumFile);
 
         $this->patchEnumFile($constants);
     }

@@ -4,10 +4,6 @@ namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RegexIterator;
-use SplFileObject;
 
 abstract class GenerateClient extends Command
 {
@@ -32,8 +28,6 @@ abstract class GenerateClient extends Command
     protected string $templateDir;
 
     protected array $filesToIgnoreDuringCleanup;
-
-    protected array $enumsPathList;
 
     public function __construct()
     {
@@ -60,7 +54,6 @@ abstract class GenerateClient extends Command
         if (self::FAILURE === $this->generateClientPackage()) {
             return self::FAILURE;
         }
-        $this->makeEnumsPathList($this->apidocDir);
         $this->patchClientPackage();
         $this->copyLicenseToClientPackage();
 
@@ -186,20 +179,6 @@ abstract class GenerateClient extends Command
 
         if ($level > 0) {
             rmdir($dir);
-        }
-    }
-
-    private function makeEnumsPathList(string $path): void
-    {
-        $enums = new RegexIterator(
-            new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)),
-            '/\_enum.yaml$/',
-            RegexIterator::MATCH
-        );
-
-        /* @var $file SplFileObject */
-        foreach ($enums as $file) {
-            $this->enumsPathList[$file->getFilename()] = $file->getPath();
         }
     }
 }

@@ -48,7 +48,7 @@ class GeneratePhpClient extends GenerateClient
 
     protected function patchClientPackage(): void
     {
-        $this->patchEnums();
+//        $this->patchEnums();
         $this->patchComposerPackage();
         $this->patchReadme();
         $this->generateProvider();
@@ -69,7 +69,7 @@ class GeneratePhpClient extends GenerateClient
 
         foreach ($files as $file) {
             try {
-                $patcher = new PhpEnumPatcher($file, $this->enumsPathList);
+                $patcher = new PhpEnumPatcher($file);
                 $patcher->patch();
             } catch (Exception) {
                 $this->info("Patch enum: $file\t[SKIP]");

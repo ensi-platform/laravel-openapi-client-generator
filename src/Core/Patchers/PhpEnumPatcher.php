@@ -33,19 +33,7 @@ class PhpEnumPatcher extends EnumPatcher
 
     private function patchConstantProperties(string $enum, string $value, string $name, string $title): string
     {
-        // Changing const to public const and adding comments to them
-        $enum = preg_replace(
-            '/' . "const $name = $value;" . '/m',
-            "\r\n\t/** $title */\r\n\tpublic const $name = $value;",
-            $enum
-        );
-
-        // Filling titles in getAllowableEnumValuesWithTitles methods
-        $enum = preg_replace(
-            '/' . "self::$name => ''," . '/m',
-            "self::$name => '$title',",
-            $enum
-        );
+        // Do some preg replace here to change something
 
         return $enum;
     }

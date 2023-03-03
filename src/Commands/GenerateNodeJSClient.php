@@ -36,7 +36,7 @@ class GenerateNodeJSClient extends GenerateClient
 
     protected function patchClientPackage(): void
     {
-        $this->patchEnums();
+//        $this->patchEnums();
         $this->patchNpmPackage();
         $this->patchTypeScriptConfig();
         $this->generateNodeJSUtils();
@@ -59,7 +59,7 @@ class GenerateNodeJSClient extends GenerateClient
 
         foreach ($files as $file) {
             try {
-                $patcher = new NodeJSEnumPatcher($file, $this->enumsPathList);
+                $patcher = new NodeJSEnumPatcher($file);
                 $patcher->patch();
             } catch (Exception) {
                 $this->info("Patch enum: $file\t[SKIP]");
