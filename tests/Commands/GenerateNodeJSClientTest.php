@@ -4,7 +4,6 @@ namespace Ensi\LaravelOpenapiClientGenerator\Tests\Commands;
 
 use Ensi\LaravelOpenapiClientGenerator\Tests\TestCase;
 
-
 class GenerateNodeJSClientTest extends TestCase
 {
     public function testPushAndPop(): void

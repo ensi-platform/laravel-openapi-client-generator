@@ -10,7 +10,6 @@ class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 {
     private const CONFIG_FILE_NAME = 'openapi-client-generator.php';
 
-
     public function register(): void
     {
         $this->mergeConfigFrom(
