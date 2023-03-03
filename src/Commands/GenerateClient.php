@@ -67,7 +67,7 @@ abstract class GenerateClient extends Command
         return self::SUCCESS;
     }
 
-    protected abstract function patchClientPackage(): void;
+    abstract protected function patchClientPackage(): void;
 
     private function generateClientPackage(): int
     {
@@ -120,6 +120,7 @@ abstract class GenerateClient extends Command
         return collect($this->params)
             ->map(function ($value, $name) {
                 $escapedValue = PHP_OS_FAMILY !== 'Windows' ? str_replace("\\", "\\\\", $value) : $value;
+
                 return "$name=$escapedValue";
             })
             ->join(',');
@@ -188,7 +189,6 @@ abstract class GenerateClient extends Command
         }
     }
 
-
     private function makeEnumsPathList(string $path): void
     {
         $enums = new RegexIterator(
@@ -199,7 +199,7 @@ abstract class GenerateClient extends Command
 
         /* @var $file SplFileObject */
         foreach ($enums as $file) {
-           $this->enumsPathList[$file->getFilename()] = $file->getPath();
+            $this->enumsPathList[$file->getFilename()] = $file->getPath();
         }
     }
 }

@@ -4,7 +4,6 @@ composer.lock
 npm-debug.log
 yarn-error.log
 .php_cs.cache
-composer.lock
 
 # IDEs #
 ###################
@@ -44,3 +43,4 @@ Thumbs.db
 openapitools.json
 .phpunit.result.cache
 build
+.php-cs-fixer.cache

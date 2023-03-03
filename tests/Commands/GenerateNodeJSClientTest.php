@@ -12,7 +12,8 @@ class GenerateNodeJSClientTest extends TestCase
         $this->withoutMockingConsoleOutput();
     }
 
-    protected function getEnvironmentSetUp($app): void {
+    protected function getEnvironmentSetUp($app): void
+    {
         $app['config']->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
         $app['config']->set('openapi-client-generator.output_dir_template', '../openapi-test-client');
         $app['config']->set('openapi-client-generator.git_user', 'Baristanko');
@@ -31,7 +32,7 @@ class GenerateNodeJSClientTest extends TestCase
     protected function getPackageProviders($app): array
     {
         return [
-            OpenapiClientGeneratorServiceProvider::class
+            OpenapiClientGeneratorServiceProvider::class,
         ];
     }
 

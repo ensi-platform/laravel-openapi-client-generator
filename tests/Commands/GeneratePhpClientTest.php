@@ -12,7 +12,8 @@ class GeneratePhpClientTest extends TestCase
         $this->withoutMockingConsoleOutput();
     }
 
-    protected function getEnvironmentSetUp($app): void {
+    protected function getEnvironmentSetUp($app): void
+    {
         $app['config']->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
         $app['config']->set('openapi-client-generator.output_dir_template', '../openapi-test-client');
         $app['config']->set('openapi-client-generator.git_user', 'Baristanko');
@@ -22,7 +23,7 @@ class GeneratePhpClientTest extends TestCase
             'apiPackage' => 'Api',
             'invokerPackage' => 'Baristanko\\OpenapiClientPHPExample',
             'modelPackage' => 'Dto',
-            'packageName' => 'OpenapiClientPHPExample'
+            'packageName' => 'OpenapiClientPHPExample',
         ]);
         $app['config']->set('openapi-client-generator.php_args.composer_name', 'ensi/openapi-client-php-example');
     }
@@ -30,7 +31,7 @@ class GeneratePhpClientTest extends TestCase
     protected function getPackageProviders($app): array
     {
         return [
-            OpenapiClientGeneratorServiceProvider::class
+            OpenapiClientGeneratorServiceProvider::class,
         ];
     }
 

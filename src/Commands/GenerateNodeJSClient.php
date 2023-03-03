@@ -2,21 +2,22 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
+
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
 use Exception;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
+
 use RecursiveIteratorIterator;
 use RegexIterator;
 
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
-
-use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
-use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
-
-class GenerateNodeJSClient extends GenerateClient {
+class GenerateNodeJSClient extends GenerateClient
+{
     /** @var string */
     protected $signature = 'openapi:generate-client-nodejs';
 
@@ -64,6 +65,7 @@ class GenerateNodeJSClient extends GenerateClient {
                 $patcher->patch();
             } catch (Exception) {
                 $this->info("Patch enum: $file\t[SKIP]");
+
                 continue;
             }
 
@@ -107,15 +109,18 @@ class GenerateNodeJSClient extends GenerateClient {
         $generator->generate();
     }
 
-    private function getSourceDir(): string {
+    private function getSourceDir(): string
+    {
         return $this->outputDir . DIRECTORY_SEPARATOR . 'src';
     }
 
-    private function getModelsDir(): string {
+    private function getModelsDir(): string
+    {
         return $this->getSourceDir() . DIRECTORY_SEPARATOR . 'models';
     }
 
-    private function getApisDir(): string {
+    private function getApisDir(): string
+    {
         return $this->getSourceDir() . DIRECTORY_SEPARATOR . 'apis';
     }
 }

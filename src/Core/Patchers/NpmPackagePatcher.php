@@ -2,11 +2,12 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class NpmPackagePatcher extends PackageManifestPatcher {
-    CONST NESTJS_COMMON_PACKAGE_VERSION = '7.0.0';
-    CONST NESTJS_CONFIG_PACKAGE_VERSION = '0.5.0';
-    CONST RXJS_PACKAGE_VERSION = '6.5.4';
-    CONST NODE_FETCH_PACKAGE_VERSION = '2.6.1';
+class NpmPackagePatcher extends PackageManifestPatcher
+{
+    const NESTJS_COMMON_PACKAGE_VERSION = '7.0.0';
+    const NESTJS_CONFIG_PACKAGE_VERSION = '0.5.0';
+    const RXJS_PACKAGE_VERSION = '6.5.4';
+    const NODE_FETCH_PACKAGE_VERSION = '2.6.1';
 
     /**
      * @var string
@@ -14,7 +15,7 @@ class NpmPackagePatcher extends PackageManifestPatcher {
     protected $manifestName = 'package.json';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $needNestJSDependencies;
 
@@ -36,6 +37,7 @@ class NpmPackagePatcher extends PackageManifestPatcher {
     private function patchScripts($packageJson)
     {
         $packageJson['scripts']['prepare'] = 'npm run build';
+
         return $packageJson;
     }
 
@@ -44,16 +46,19 @@ class NpmPackagePatcher extends PackageManifestPatcher {
         if ($this->needNestJSDependencies) {
             $packageJson = $this->addDependenciesForNestJS($packageJson);
         }
+
         return $packageJson;
     }
 
-    private function addDependenciesForNestJS($packageJson) {
+    private function addDependenciesForNestJS($packageJson)
+    {
         $packageJson['devDependencies']['@nestjs/common'] = NpmPackagePatcher::NESTJS_COMMON_PACKAGE_VERSION;
         $packageJson['devDependencies']['@nestjs/config'] = NpmPackagePatcher::NESTJS_CONFIG_PACKAGE_VERSION;
         $packageJson['devDependencies']['rxjs'] = NpmPackagePatcher::RXJS_PACKAGE_VERSION;
         $packageJson['devDependencies']['node-fetch'] = NpmPackagePatcher::NODE_FETCH_PACKAGE_VERSION;
         $packageJson['devDependencies']['iterare'] = '1.2.1';
         $packageJson['devDependencies']['reflect-metadata'] = '0.1.13';
+
         return $packageJson;
     }
 

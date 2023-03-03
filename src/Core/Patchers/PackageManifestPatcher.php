@@ -2,8 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-abstract class PackageManifestPatcher {
-
+abstract class PackageManifestPatcher
+{
     /**
      * @var string
      */
@@ -19,7 +19,8 @@ abstract class PackageManifestPatcher {
         $this->packageRootDir = $packageRootDir;
     }
 
-    public function patch(): void {
+    public function patch(): void
+    {
         $manifest = $this->getManifest();
 
         $manifest = $this->applyPatchers($manifest);
@@ -46,5 +47,4 @@ abstract class PackageManifestPatcher {
     {
         return $this->packageRootDir . DIRECTORY_SEPARATOR . $this->manifestName;
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class ComposerPackagePatcher extends PackageManifestPatcher {
-
+class ComposerPackagePatcher extends PackageManifestPatcher
+{
     /** @var string */
     protected $manifestName = 'composer.json';
     /** @var string */

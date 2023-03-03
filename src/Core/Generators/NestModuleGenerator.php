@@ -5,11 +5,12 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 use FilesystemIterator;
 use Illuminate\Support\Str;
 
-class NestModuleGenerator {
-    CONST MODULE_DIRNAME = 'module';
-    CONST MODULE_FILENAME = 'module.ts';
-    CONST CONFIG_FILENAME = 'config.ts';
-    CONST INDEX_FILENAME = 'index.ts';
+class NestModuleGenerator
+{
+    const MODULE_DIRNAME = 'module';
+    const MODULE_FILENAME = 'module.ts';
+    const CONFIG_FILENAME = 'config.ts';
+    const INDEX_FILENAME = 'index.ts';
 
     /**
      * @var string
@@ -67,6 +68,7 @@ class NestModuleGenerator {
         $content = collect([ self::CONFIG_FILENAME, self::MODULE_FILENAME ])
             ->map(function (string $file) {
                 $name = basename($file, '.ts');
+
                 return "export * from './$name';";
             })
             ->join("\n");
@@ -101,11 +103,11 @@ class NestModuleGenerator {
         );
 
         return collect($services)
-            ->map(function ($service) { 
-                return Str::ucfirst(Str::of($service->getBasename('.ts'))->camel()); 
+            ->map(function ($service) {
+                return Str::ucfirst(Str::of($service->getBasename('.ts'))->camel());
             })
-            ->filter(function ($service) { 
-                return $service !== 'Index'; 
+            ->filter(function ($service) {
+                return $service !== 'Index';
             });
     }
 

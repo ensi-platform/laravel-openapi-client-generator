@@ -4,8 +4,8 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
 use Illuminate\Support\Str;
 
-class NodeJSEnumPatcher extends EnumPatcher {
-
+class NodeJSEnumPatcher extends EnumPatcher
+{
     protected function getSpecificationName(): string
     {
         return $this->toSnakeCase(basename($this->enumFile, '.ts'));
@@ -20,7 +20,6 @@ class NodeJSEnumPatcher extends EnumPatcher {
         $enum = file_get_contents($this->enumFile);
 
         if ($constants !== null) {
-
             foreach ($constants as $constant) {
                 $enum = $this->patchProperties(
                     $enum,

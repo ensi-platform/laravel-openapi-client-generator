@@ -31,9 +31,9 @@ abstract class EnumPatcher
         $this->patchEnumFile($constants);
     }
 
-    protected abstract function getSpecificationName(): string;
+    abstract protected function getSpecificationName(): string;
 
-    protected abstract function patchEnumFile(array $constants): void;
+    abstract protected function patchEnumFile(array $constants): void;
 
     protected function getConstantsFromSpecification(string $specification): array
     {

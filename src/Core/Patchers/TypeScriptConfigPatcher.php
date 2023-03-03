@@ -2,8 +2,8 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class TypeScriptConfigPatcher extends PackageManifestPatcher {
-
+class TypeScriptConfigPatcher extends PackageManifestPatcher
+{
     /**
      * @var string
      */
@@ -20,6 +20,7 @@ class TypeScriptConfigPatcher extends PackageManifestPatcher {
     private function patchTargetJsVersion($tsConfig)
     {
         $tsConfig['compilerOptions']['target'] = 'es2017';
+
         return $tsConfig;
     }
 
@@ -27,6 +28,7 @@ class TypeScriptConfigPatcher extends PackageManifestPatcher {
     {
         $tsConfig['compilerOptions']['emitDecoratorMetadata'] = true;
         $tsConfig['compilerOptions']['experimentalDecorators'] = true;
+
         return $tsConfig;
     }
 }

@@ -2,16 +2,16 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
 use Exception;
 use FilesystemIterator;
+
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
-
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 
 class GeneratePhpClient extends GenerateClient
 {
@@ -74,6 +74,7 @@ class GeneratePhpClient extends GenerateClient
                 $patcher->patch();
             } catch (Exception) {
                 $this->info("Patch enum: $file\t[SKIP]");
+
                 continue;
             }
 
