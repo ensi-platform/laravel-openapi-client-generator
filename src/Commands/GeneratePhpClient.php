@@ -34,7 +34,7 @@ class GeneratePhpClient extends GenerateClient
     {
         parent::__construct();
 
-        $this->composerName = config("openapi-client-generator.{$this->client}_args.composer_name", 'ensi/openapi-client-php-example');
+        $this->composerName = config("openapi-client-generator.{$this->client}_args.composer_name");
         $this->laravelPackageConfigKey = config(
             "openapi-client-generator.{$this->client}_args.laravel_package_config_key",
             ''
