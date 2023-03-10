@@ -71,8 +71,9 @@ class GeneratePhpClient extends GenerateClient
             try {
                 $patcher = new PhpEnumPatcher($file);
                 $patcher->patch();
-            } catch (Exception) {
-                $this->info("Patch enum: $file\t[SKIP]");
+            } catch (Exception $e) {
+                $this->info("Patch enum: $file\t[ERROR]");
+                $this->error($e->getMessage());
 
                 continue;
             }
