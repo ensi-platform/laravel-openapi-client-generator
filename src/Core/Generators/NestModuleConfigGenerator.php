@@ -14,8 +14,7 @@ class NestModuleConfigGenerator
     public function __construct(
         private readonly string $moduleDir,
         private readonly string $packageName,
-    )
-    {
+    ) {
     }
 
     public function generate(): void
