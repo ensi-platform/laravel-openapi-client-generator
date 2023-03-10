@@ -4,18 +4,12 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
 class NodeJSUtilsGenerator
 {
-    const UTILS_DIRNAME = 'utils';
-    const QUERY_STRING_FILTER_WRAPPER_FILENAME = 'querystringFilterWrapper.ts';
-    const INDEX_FILENAME = 'index.ts';
+    public const UTILS_DIRNAME = 'utils';
+    public const QUERY_STRING_FILTER_WRAPPER_FILENAME = 'querystringFilterWrapper.ts';
+    public const INDEX_FILENAME = 'index.ts';
 
-    /**
-     * @var string
-     */
-    private $sourceDir;
-
-    public function __construct(string $sourceDir)
+    public function __construct(private readonly string $sourceDir)
     {
-        $this->sourceDir = $sourceDir;
     }
 
     public function generate(): void

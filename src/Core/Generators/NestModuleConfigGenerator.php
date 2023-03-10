@@ -6,25 +6,16 @@ use Illuminate\Support\Str;
 
 class NestModuleConfigGenerator
 {
-    const MODULE_DIRNAME = 'module';
-    const MODULE_FILENAME = 'module.ts';
-    const CONFIG_FILENAME = 'config.ts';
-    const INDEX_FILENAME = 'index.ts';
+    public const MODULE_DIRNAME = 'module';
+    public const MODULE_FILENAME = 'module.ts';
+    public const CONFIG_FILENAME = 'config.ts';
+    public const INDEX_FILENAME = 'index.ts';
 
-    /**
-     * @var string
-     */
-    private $moduleDir;
-
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    public function __construct(string $moduleDir, string $packageName)
+    public function __construct(
+        private readonly string $moduleDir,
+        private readonly string $packageName,
+    )
     {
-        $this->moduleDir = $moduleDir;
-        $this->packageName = $packageName;
     }
 
     public function generate(): void

@@ -7,31 +7,16 @@ use Illuminate\Support\Str;
 
 class NestModuleGenerator
 {
-    const MODULE_DIRNAME = 'module';
-    const MODULE_FILENAME = 'module.ts';
-    const CONFIG_FILENAME = 'config.ts';
-    const INDEX_FILENAME = 'index.ts';
+    public const MODULE_DIRNAME = 'module';
+    public const MODULE_FILENAME = 'module.ts';
+    public const CONFIG_FILENAME = 'config.ts';
+    public const INDEX_FILENAME = 'index.ts';
 
-    /**
-     * @var string
-     */
-    private $sourceDir;
-
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    /**
-     * @var string
-     */
-    private $apisDir;
-
-    public function __construct(string $sourceDir, string $packageName, string $apisDir)
-    {
-        $this->sourceDir = $sourceDir;
-        $this->packageName = $packageName;
-        $this->apisDir = $apisDir;
+    public function __construct(
+        private readonly string $sourceDir,
+        private readonly string $packageName,
+        private readonly string $apisDir,
+    ) {
     }
 
     public function generate(): void
@@ -65,7 +50,7 @@ class NestModuleGenerator
 
     private function generateIndexFile(): void
     {
-        $content = collect([ self::CONFIG_FILENAME, self::MODULE_FILENAME ])
+        $content = collect([self::CONFIG_FILENAME, self::MODULE_FILENAME])
             ->map(function (string $file) {
                 $name = basename($file, '.ts');
 

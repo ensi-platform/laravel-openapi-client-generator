@@ -74,7 +74,7 @@ return [
             'apiPackage' => 'Api',
             'invokerPackage' => '<paste_your_php_package_namespace>',
             'modelPackage' => 'Dto',
-            'packageName' => '<paste_your_php_package_name>'
+            'packageName' => '<paste_your_php_package_name>',
         ],
 
         /**
@@ -91,5 +91,5 @@ return [
          * Options for disable patch section "require" composer.json
          */
         'composer_disable_patch_require' => false,
-    ]
+    ],
 ];
