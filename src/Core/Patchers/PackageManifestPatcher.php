@@ -4,19 +4,10 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
 abstract class PackageManifestPatcher
 {
-    /**
-     * @var string
-     */
-    protected $manifestName;
+    protected string $manifestName;
 
-    /**
-     * @var string
-     */
-    protected $packageRootDir;
-
-    public function __construct(string $packageRootDir)
+    public function __construct(protected string $packageRootDir)
     {
-        $this->packageRootDir = $packageRootDir;
     }
 
     public function patch(): void
@@ -28,16 +19,16 @@ abstract class PackageManifestPatcher
         $this->saveManifest($manifest);
     }
 
-    abstract protected function applyPatchers($manifest);
+    abstract protected function applyPatchers(array $manifest): array;
 
-    private function getManifest()
+    private function getManifest(): array
     {
         return json_decode(file_get_contents($this->getPackageManifestPath()), true);
     }
 
-    private function saveManifest($packageJson)
+    private function saveManifest(array $packageJson): void
     {
-        return file_put_contents(
+        file_put_contents(
             $this->getPackageManifestPath(),
             json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );

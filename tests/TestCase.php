@@ -23,7 +23,7 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app): void
     {
-        config()->set('openapi-client-generator.apidoc_dir', ('./tests/api-docs'));
+        config()->set('openapi-client-generator.apidoc_dir', './tests/api-docs');
         config()->set('openapi-client-generator.output_dir_template', '../openapi-test-client');
         config()->set('openapi-client-generator.git_user', 'Baristanko');
         config()->set('openapi-client-generator.git_repo_template', 'openapi-client-js-example');
@@ -32,7 +32,7 @@ class TestCase extends Orchestra
         // PHP client params
         config()->set('openapi-client-generator.php_args.params', [
             'apiPackage' => 'Api',
-            'invokerPackage' => 'Baristanko\\OpenapiClientPHPExample',
+            'invokerPackage' => 'Ensi\\OpenapiClientPHPExample',
             'modelPackage' => 'Dto',
             'packageName' => 'OpenapiClientPHPExample',
         ]);
