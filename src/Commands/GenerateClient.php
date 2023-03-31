@@ -64,7 +64,7 @@ abstract class GenerateClient extends Command
 
     private function generateClientPackage(): int
     {
-        $bin = 'npx @openapitools/openapi-generator-cli';
+        $bin = 'npx --yes @openapitools/openapi-generator-cli';
         $i = escapeshellarg($this->apidocDir . DIRECTORY_SEPARATOR . "index.yaml");
         $g = escapeshellarg($this->generator);
         $o = escapeshellarg($this->outputDir);
