@@ -2,19 +2,15 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-class ComposerPackagePatcher extends PackageManifestPatcher {
+class ComposerPackagePatcher extends PackageManifestPatcher
+{
+    protected string $manifestName = 'composer.json';
 
-    /** @var string */
-    protected $manifestName = 'composer.json';
-    /** @var string */
-    protected $packageName;
-    /** @var bool */
-    private $disableRequirePatching = false;
+    private bool $disableRequirePatching = false;
 
-    public function __construct(string $packageRootDir, string $packageName)
+    public function __construct(string $packageRootDir, protected string $packageName)
     {
         parent::__construct($packageRootDir);
-        $this->packageName = $packageName;
     }
 
     public function setDisableRequirePatching(bool $disableRequirePatching): self
@@ -24,7 +20,7 @@ class ComposerPackagePatcher extends PackageManifestPatcher {
         return $this;
     }
 
-    protected function applyPatchers($manifest): array
+    protected function applyPatchers(array $manifest): array
     {
         $manifest = $this->patchPackageName($manifest);
 
@@ -35,14 +31,14 @@ class ComposerPackagePatcher extends PackageManifestPatcher {
         return $manifest;
     }
 
-    protected function patchPackageName($manifest)
+    protected function patchPackageName(array $manifest): array
     {
         $manifest['name'] = $this->packageName;
 
         return $manifest;
     }
 
-    protected function patchRequire($manifest)
+    protected function patchRequire(array $manifest): array
     {
         $manifest['require']['php'] = '^7.1 || ^8.0';
         $manifest['require']['guzzlehttp/guzzle'] = '^6.2 || ^7.0';

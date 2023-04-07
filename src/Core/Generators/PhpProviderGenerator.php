@@ -9,116 +9,97 @@ use Nette\PhpGenerator\PsrPrinter;
 
 class PhpProviderGenerator
 {
-   /**
-    * @var string
-    */
-   private $packageDir;
+    public function __construct(
+        private readonly string $packageDir,
+        private readonly string $namespace,
+        private readonly string $packageName,
+        private readonly string $apiPackage,
+        private readonly string $modelPackage,
+    ) {
+    }
 
-   /**
-    * @var string
-    */
-   private $namespace;
+    public function generate(): void
+    {
+        $file = $this->getProviderFile();
 
-   /**
-    * @var string
-    */
-   private $packageName;
+        $this->saveProviderFile($file);
+    }
 
-   /**
-    * @var string
-    */
-   private $apiPackage;
+    private function getClassesFromDirectory(string $directory): Collection
+    {
+        $apis = new FilesystemIterator(
+            $directory,
+            FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
+        );
 
-   /**
-    * @var string
-    */
-    private $modelPackage;
+        return collect($apis)->map(function ($service) {
+            return $service->getBasename('.php');
+        });
+    }
 
+    private function getProviderFile(): PhpFile
+    {
+        $file = new PhpFile();
+        $namespace = $file->addNamespace($this->namespace);
+        $class = $namespace->addClass($this->getProviderName());
 
-   public function __construct(string $packageDir, string $namespace, string $packageName, string $apiPackage, string $modelPackage)
-   {
-      $this->packageDir = $packageDir;
-      $this->namespace = $namespace;
-      $this->packageName = $packageName;
-      $this->apiPackage = $apiPackage;
-      $this->modelPackage = $modelPackage;
-   }
+        $this->addApisToProviderClass($class);
+        $this->addDtosToProviderClass($class);
+        $this->addConfigurationToProviderClass($class);
 
-   public function generate(): void
-   {
-      $file = $this->getProviderFile();
+        return $file;
+    }
 
-      $this->saveProviderFile($file);
-   }
+    private function addApisToProviderClass($class): void
+    {
+        $apis = $this->getClassesFromDirectory(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage
+        );
+        $apiClassStrings = $apis->map(function ($className) {
+            return "\\$this->namespace\\$this->apiPackage\\$className";
+        });
 
-   private function getClassesFromDirectory(string $directory)
-   {
-      $apis = new FilesystemIterator(
-         $directory,
-         FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
-      );
+        $class->addProperty('apis', $apiClassStrings->values()->all())
+            ->setPublic()
+            ->setStatic()
+            ->addComment('@var string[]');
+    }
 
-      return collect($apis)->map(function ($service) {
-         return $service->getBasename('.php');
-      });
-   }
+    private function addDtosToProviderClass($class): void
+    {
+        $dtos = $this->getClassesFromDirectory(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->modelPackage
+        );
+        $dtoClassStrings = $dtos->map(function ($className) {
+            return "\\$this->namespace\\$this->modelPackage\\$className";
+        });
 
-   private function getProviderFile()
-   {
-      $file = new PhpFile();
-      $namespace = $file->addNamespace($this->namespace);
-      $class = $namespace->addClass($this->getProviderName());
+        $class->addProperty('dtos', $dtoClassStrings->values()->all())
+            ->setPublic()
+            ->setStatic()
+            ->addComment('@var string[]');
+    }
 
-      $this->addApisToProviderClass($class);
-      $this->addDtosToProviderClass($class);
-      $this->addConfigurationToProviderClass($class);
+    private function addConfigurationToProviderClass($class): void
+    {
+        $class->addProperty('configuration', "\\$this->namespace\\Configuration")
+            ->setPublic()
+            ->setStatic()
+            ->addComment('@var string');
+    }
 
-      return $file;
-   }
+    private function saveProviderFile($file): void
+    {
+        $printer = new PsrPrinter();
+        $serviceProviderName = $this->getProviderName();
+        file_put_contents(
+            $this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php",
+            $printer->printFile($file)
+        );
+    }
 
-   private function addApisToProviderClass($class) 
-   {
-      $apis = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->apiPackage);
-      $apiClassStrings = $apis->map(function ($className) {
-         return "\\$this->namespace\\$this->apiPackage\\$className";
-      });
-
-      $class->addProperty('apis', $apiClassStrings->values()->all())
-         ->setPublic()
-         ->setStatic()
-         ->addComment('@var string[]');
-   }
-
-   private function addDtosToProviderClass($class) 
-   {
-      $dtos = $this->getClassesFromDirectory($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $this->modelPackage);
-      $dtoClassStrings = $dtos->map(function ($className) {
-         return "\\$this->namespace\\$this->modelPackage\\$className";
-      });
-
-      $class->addProperty('dtos', $dtoClassStrings->values()->all())
-         ->setPublic()
-         ->setStatic()
-         ->addComment('@var string[]');
-   }
-
-   private function addConfigurationToProviderClass($class) 
-   {
-      $class->addProperty('configuration', "\\$this->namespace\\Configuration")
-         ->setPublic()
-         ->setStatic()
-         ->addComment('@var string');
-   }
-
-   private function saveProviderFile($file)
-   {
-      $printer = new PsrPrinter();
-      $serviceProviderName = $this->getProviderName();
-      file_put_contents($this->packageDir . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . $serviceProviderName . ".php", $printer->printFile($file));
-   }
-
-   private function getProviderName(): string
-   {
-      return "{$this->packageName}Provider";
-   }
+    private function getProviderName(): string
+    {
+        return "{$this->packageName}Provider";
+    }
 }

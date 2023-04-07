@@ -4,26 +4,17 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 
 use Illuminate\Support\Str;
 
-class NestModuleConfigGenerator {
-    CONST MODULE_DIRNAME = 'module';
-    CONST MODULE_FILENAME = 'module.ts';
-    CONST CONFIG_FILENAME = 'config.ts';
-    CONST INDEX_FILENAME = 'index.ts';
+class NestModuleConfigGenerator
+{
+    public const MODULE_DIRNAME = 'module';
+    public const MODULE_FILENAME = 'module.ts';
+    public const CONFIG_FILENAME = 'config.ts';
+    public const INDEX_FILENAME = 'index.ts';
 
-    /**
-     * @var string
-     */
-    private $moduleDir;
-
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    public function __construct(string $moduleDir, string $packageName)
-    {
-        $this->moduleDir = $moduleDir;
-        $this->packageName = $packageName;
+    public function __construct(
+        private readonly string $moduleDir,
+        private readonly string $packageName,
+    ) {
     }
 
     public function generate(): void

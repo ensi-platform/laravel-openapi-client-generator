@@ -2,44 +2,31 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
+use Exception;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSEnumPatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NpmPackagePatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\TypeScriptConfigPatcher;
-use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\NodeJSIndexFilePatcher;
-
-use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NestModuleGenerator;
-use Ensi\LaravelOpenapiClientGenerator\Core\Generators\NodeJSUtilsGenerator;
-
-class GenerateNodeJSClient extends GenerateClient {
-    /**
-     * @var string
-     */
+class GenerateNodeJSClient extends GenerateClient
+{
+    /** @var string */
     protected $signature = 'openapi:generate-client-nodejs';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Generate nodejs http client from openapi spec files by OpenApi Generator';
 
-    /**
-     * @var string
-     */
-    protected $client = 'js';
+    protected string $client = 'js';
 
-    /**
-     * @var string
-     */
-    protected $generator = 'typescript-fetch';
+    protected string $generator = 'typescript-fetch';
 
-    /**
-     * @var string
-     */
-    protected $needGenerateNestJSModule;
+    protected string $needGenerateNestJSModule;
 
     public function __construct()
     {
@@ -49,7 +36,7 @@ class GenerateNodeJSClient extends GenerateClient {
 
     protected function patchClientPackage(): void
     {
-        $this->patchEnums();
+        //        $this->patchEnums();
         $this->patchNpmPackage();
         $this->patchTypeScriptConfig();
         $this->generateNodeJSUtils();
@@ -71,10 +58,17 @@ class GenerateNodeJSClient extends GenerateClient {
         );
 
         foreach ($files as $file) {
-            $this->info("Patch enum: $file");
+            try {
+                $patcher = new NodeJSEnumPatcher($file);
+                $patcher->patch();
+            } catch (Exception $e) {
+                $this->info("Patch enum: $file\t[ERROR]");
+                $this->error($e->getMessage());
 
-            $patcher = new NodeJSEnumPatcher($file, $this->apidocDir);
-            $patcher->patch();
+                continue;
+            }
+
+            $this->info("Patch enum: $file\t[OK]");
         }
     }
 
@@ -114,15 +108,18 @@ class GenerateNodeJSClient extends GenerateClient {
         $generator->generate();
     }
 
-    private function getSourceDir(): string {
+    private function getSourceDir(): string
+    {
         return $this->outputDir . DIRECTORY_SEPARATOR . 'src';
     }
 
-    private function getModelsDir(): string {
+    private function getModelsDir(): string
+    {
         return $this->getSourceDir() . DIRECTORY_SEPARATOR . 'models';
     }
 
-    private function getApisDir(): string {
+    private function getApisDir(): string
+    {
         return $this->getSourceDir() . DIRECTORY_SEPARATOR . 'apis';
     }
 }

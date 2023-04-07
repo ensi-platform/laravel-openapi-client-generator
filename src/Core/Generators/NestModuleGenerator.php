@@ -5,32 +5,18 @@ namespace Ensi\LaravelOpenapiClientGenerator\Core\Generators;
 use FilesystemIterator;
 use Illuminate\Support\Str;
 
-class NestModuleGenerator {
-    CONST MODULE_DIRNAME = 'module';
-    CONST MODULE_FILENAME = 'module.ts';
-    CONST CONFIG_FILENAME = 'config.ts';
-    CONST INDEX_FILENAME = 'index.ts';
+class NestModuleGenerator
+{
+    public const MODULE_DIRNAME = 'module';
+    public const MODULE_FILENAME = 'module.ts';
+    public const CONFIG_FILENAME = 'config.ts';
+    public const INDEX_FILENAME = 'index.ts';
 
-    /**
-     * @var string
-     */
-    private $sourceDir;
-
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    /**
-     * @var string
-     */
-    private $apisDir;
-
-    public function __construct(string $sourceDir, string $packageName, string $apisDir)
-    {
-        $this->sourceDir = $sourceDir;
-        $this->packageName = $packageName;
-        $this->apisDir = $apisDir;
+    public function __construct(
+        private readonly string $sourceDir,
+        private readonly string $packageName,
+        private readonly string $apisDir,
+    ) {
     }
 
     public function generate(): void
@@ -64,9 +50,10 @@ class NestModuleGenerator {
 
     private function generateIndexFile(): void
     {
-        $content = collect([ self::CONFIG_FILENAME, self::MODULE_FILENAME ])
+        $content = collect([self::CONFIG_FILENAME, self::MODULE_FILENAME])
             ->map(function (string $file) {
                 $name = basename($file, '.ts');
+
                 return "export * from './$name';";
             })
             ->join("\n");
@@ -101,11 +88,11 @@ class NestModuleGenerator {
         );
 
         return collect($services)
-            ->map(function ($service) { 
-                return Str::ucfirst(Str::of($service->getBasename('.ts'))->camel()); 
+            ->map(function ($service) {
+                return Str::ucfirst(Str::of($service->getBasename('.ts'))->camel());
             })
-            ->filter(function ($service) { 
-                return $service !== 'Index'; 
+            ->filter(function ($service) {
+                return $service !== 'Index';
             });
     }
 

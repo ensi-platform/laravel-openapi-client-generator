@@ -7,57 +7,27 @@ use Illuminate\Support\Str;
 
 abstract class GenerateClient extends Command
 {
-    /**
-     * @var string
-     * Client name: js or php, must be set in child classes
-     */
-    protected $client;
+    /** Client name: js or php, must be set in child classes */
+    protected string $client;
 
-    /**
-     * @var string
-     * Generator name, one of valid openapi generators names
-     */
-    protected $generator;
+    /** Generator name, one of valid openapi generators names */
+    protected string $generator;
 
-    /**
-     * @var string
-     */
-    protected $apidocDir;
+    protected string $apidocDir;
 
-    /**
-     * @var string
-     */
-    protected $outputDir;
+    protected string $outputDir;
 
-    /**
-     * @var string
-     */
-    protected $gitUser;
+    protected string $gitUser;
 
-    /**
-     * @var string
-     */
-    protected $gitRepo;
+    protected string $gitRepo;
 
-    /**
-     * @var string
-     */
-    protected $gitHost;
+    protected string $gitHost;
 
-    /**
-     * @var array
-     */
-    protected $params;
+    protected array $params;
 
-    /**
-     * @var string
-     */
-    protected $templateDir;
+    protected string $templateDir;
 
-    /**
-     * @var array
-     */
-    protected $filesToIgnoreDuringCleanup;
+    protected array $filesToIgnoreDuringCleanup;
 
     public function __construct()
     {
@@ -90,11 +60,11 @@ abstract class GenerateClient extends Command
         return self::SUCCESS;
     }
 
-    protected abstract function patchClientPackage(): void;
+    abstract protected function patchClientPackage(): void;
 
     private function generateClientPackage(): int
     {
-        $bin = 'npx @openapitools/openapi-generator-cli';
+        $bin = 'npx --yes @openapitools/openapi-generator-cli';
         $i = escapeshellarg($this->apidocDir . DIRECTORY_SEPARATOR . "index.yaml");
         $g = escapeshellarg($this->generator);
         $o = escapeshellarg($this->outputDir);
@@ -143,6 +113,7 @@ abstract class GenerateClient extends Command
         return collect($this->params)
             ->map(function ($value, $name) {
                 $escapedValue = PHP_OS_FAMILY !== 'Windows' ? str_replace("\\", "\\\\", $value) : $value;
+
                 return "$name=$escapedValue";
             })
             ->join(',');
