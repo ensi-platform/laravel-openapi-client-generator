@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ensi\\LaravelOpenapiClientGenerator\\Tests\\": "tests"
+            "Ensi\\LaravelOpenapiClientGenerator\\Tests\\": "tests/"
         }
     },
     "require-dev": {

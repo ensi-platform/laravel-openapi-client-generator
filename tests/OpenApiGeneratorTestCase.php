@@ -5,13 +5,37 @@ namespace Ensi\LaravelOpenapiClientGenerator\Tests;
 use Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-class TestCase extends Orchestra
+class OpenApiGeneratorTestCase extends Orchestra
 {
+    public static string $outputDirName = '../openapi-test-client';
     public function setUp(): void
     {
         parent::setUp();
 
         $this->withoutMockingConsoleOutput();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        foreach (glob(static::$outputDirName . '*') as $dirName) {
+            $this->rmdir($dirName);
+        }
+    }
+
+    protected function rmdir(string $dir): void
+    {
+        $files = array_diff(scandir($dir), array('.','..'));
+        foreach ($files as $file) {
+            if(is_dir("$dir/$file")) {
+                $this->rmdir("$dir/$file");
+            } else {
+                unlink("$dir/$file");
+            }
+        }
+
+        rmdir($dir);
     }
 
     protected function getPackageProviders($app): array
@@ -24,7 +48,7 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app): void
     {
         config()->set('openapi-client-generator.apidoc_dir', './tests/api-docs');
-        config()->set('openapi-client-generator.output_dir_template', '../openapi-test-client');
+        config()->set('openapi-client-generator.output_dir_template', static::$outputDirName);
         config()->set('openapi-client-generator.git_user', 'Baristanko');
         config()->set('openapi-client-generator.git_repo_template', 'openapi-client-js-example');
         config()->set('openapi-client-generator.git_host', 'github.com');

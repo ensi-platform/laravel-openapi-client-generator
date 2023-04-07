@@ -2,9 +2,9 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Tests\Commands;
 
-use Ensi\LaravelOpenapiClientGenerator\Tests\TestCase;
+use Ensi\LaravelOpenapiClientGenerator\Tests\OpenApiGeneratorTestCase;
 
-class GenerateNodeJSClientTest extends TestCase
+class GenerateNodeJSClientOpenApiGeneratorTest extends OpenApiGeneratorTestCase
 {
     public function testPushAndPop(): void
     {
