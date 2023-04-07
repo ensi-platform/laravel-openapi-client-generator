@@ -36,7 +36,7 @@ class GenerateNodeJSClient extends GenerateClient
 
     protected function patchClientPackage(): void
     {
-//        $this->patchEnums();
+        //        $this->patchEnums();
         $this->patchNpmPackage();
         $this->patchTypeScriptConfig();
         $this->generateNodeJSUtils();

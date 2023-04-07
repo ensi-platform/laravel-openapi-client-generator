@@ -8,6 +8,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 class OpenApiGeneratorTestCase extends Orchestra
 {
     public static string $outputDirName = '../openapi-test-client';
+
     public function setUp(): void
     {
         parent::setUp();
@@ -26,7 +27,7 @@ class OpenApiGeneratorTestCase extends Orchestra
 
     protected function rmdir(string $dir): void
     {
-        $files = array_diff(scandir($dir), array('.','..'));
+        $files = array_diff(scandir($dir), ['.','..']);
         foreach ($files as $file) {
             if(is_dir("$dir/$file")) {
                 $this->rmdir("$dir/$file");

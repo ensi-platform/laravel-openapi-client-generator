@@ -48,7 +48,7 @@ class GeneratePhpClient extends GenerateClient
 
     protected function patchClientPackage(): void
     {
-//        $this->patchEnums();
+        //        $this->patchEnums();
         $this->patchComposerPackage();
         $this->patchReadme();
         $this->generateProvider();
