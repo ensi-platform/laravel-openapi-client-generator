@@ -2,7 +2,6 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator;
 
-use Ensi\LaravelOpenapiClientGenerator\Commands\GenerateNodeJSClient;
 use Ensi\LaravelOpenapiClientGenerator\Commands\GeneratePhpClient;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,7 +25,6 @@ class OpenapiClientGeneratorServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                GenerateNodeJSClient::class,
                 GeneratePhpClient::class,
             ]);
         }
