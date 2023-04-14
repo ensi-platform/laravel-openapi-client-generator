@@ -1,6 +1,7 @@
 # Laravel OpenApi Client Generator
 
 Пакет для Laravel, который генерирует http клиенты к сервису при помощи [OpenApi Generator](https://openapi-generator.tech/).
+На данный момент есть поддержка для одной платформы: PHP.
 
 ## Зависимости:
 1. Java 8 и выше.
