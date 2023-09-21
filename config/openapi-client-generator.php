@@ -91,5 +91,10 @@ return [
          * Options for disable patch section "require" composer.json
          */
         'composer_disable_patch_require' => false,
+
+        /**
+         * Options for disable patch enum
+         */
+        'enum_disable_patch' => false,
     ],
 ];

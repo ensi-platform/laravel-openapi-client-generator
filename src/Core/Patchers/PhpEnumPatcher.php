@@ -2,44 +2,50 @@
 
 namespace Ensi\LaravelOpenapiClientGenerator\Core\Patchers;
 
-use Illuminate\Support\Str;
+use Exception;
 
-class PhpEnumPatcher extends EnumPatcher
+class PhpEnumPatcher extends PhpClassPatcher
 {
-    protected function getSpecificationName(): string
+    public function __construct(protected string $enumFile)
     {
-        return $this->toSnakeCase(basename($this->enumFile, '.php'));
     }
 
-    protected function patchEnumFile(array $constants): void
+    /** @throws Exception */
+    public function patch(): void
     {
         if (!file_exists($this->enumFile)) {
-            return;
+            throw new Exception("$this->enumFile not exists");
         }
 
-        $enum = file_get_contents($this->enumFile);
+        $content = file_get_contents($this->enumFile);
 
-        foreach ($constants as $constant) {
-            $enum = $this->patchConstantProperties(
-                $enum,
-                $constant['value'],
-                Str::upper($constant['name']),
-                $constant['title']
-            );
+        $content = $this->escapingResponseDescription($content);
+
+        file_put_contents($this->enumFile, $content);
+    }
+
+    /** @throws Exception */
+    protected function escapingResponseDescription(string $content): string
+    {
+        $method = $this->getMethod('getDescriptions', 'array', $content);
+
+        $descriptions = $this->parsingResponseDescription($method);
+
+        $escapingMethod = $method;
+        foreach ($descriptions as $description) {
+            $escapedDescription = $this->escapingString($description);
+            $escapingMethod = $this->replaceValue($escapingMethod, $description, $escapedDescription);
         }
 
-        file_put_contents($this->enumFile, $enum);
+        return $this->replaceValue($content, $method, $escapingMethod);
     }
 
-    private function patchConstantProperties(string $enum, string $value, string $name, string $title): string
+    protected function parsingResponseDescription(string $context): array
     {
-        // Do some preg replace here to change something
-
-        return $enum;
-    }
-
-    private function toSnakeCase(string $str): string
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $str));
+        return preg_match_all(
+            '/self::.*=> ([\'|\"].*[\'|\"]),\\n/smU',
+            $context,
+            $constants
+        ) ? $constants[1] : [];
     }
 }
