@@ -19,7 +19,7 @@ class PhpEnumPatcher extends PhpClassPatcher
 
         $content = file_get_contents($this->enumFile);
 
-        $this->escapingResponseDescription($content);
+        $content = $this->escapingResponseDescription($content);
 
         file_put_contents($this->enumFile, $content);
     }
