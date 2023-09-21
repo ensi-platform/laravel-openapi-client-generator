@@ -29,6 +29,7 @@ class GeneratePhpClient extends GenerateClient
     protected string $laravelPackageConfigKey;
 
     private bool $disableComposerPatchRequire;
+    private bool $disableEnumPath;
 
     public function __construct()
     {
@@ -44,11 +45,19 @@ class GeneratePhpClient extends GenerateClient
             "openapi-client-generator.{$this->client}_args.composer_disable_patch_require",
             false
         );
+
+        $this->disableEnumPath = (bool)config(
+            "openapi-client-generator.{$this->client}_args.enum_disable_patch",
+            false
+        );
     }
 
     protected function patchClientPackage(): void
     {
-        //        $this->patchEnums();
+        if (!$this->disableEnumPath) {
+            $this->patchEnums();
+        }
+
         $this->patchComposerPackage();
         $this->patchReadme();
         $this->generateProvider();
