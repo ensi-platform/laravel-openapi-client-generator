@@ -94,9 +94,8 @@ abstract class GenerateClient extends Command
 
         $path = implode(DIRECTORY_SEPARATOR, [$this->asyncApiTemplateDir, "generate.js"]);
 
-        // $i = escapeshellarg($inputPath);
         $o = escapeshellarg($this->asyncApiOutputDir);
-        $f = escapeshellarg($this->asyncApiDocDir);
+        $f = escapeshellarg($this->asyncApiDocDir . DIRECTORY_SEPARATOR . "index.yaml");
         $command = "node $path -o $o -f $f";
 
         $this->info("Generating AsyncApi $this->client client by command: $command");
@@ -218,11 +217,11 @@ abstract class GenerateClient extends Command
 
     private function getDefaultAsyncApiOutputDir(): string
     {
-        return $this->outputDir . DIRECTORY_SEPARATOR . "/async";
+        return $this->outputDir . DIRECTORY_SEPARATOR . "async";
     }
 
     private function getDefaultAsyncApiDocDir(): string
     {
-        return '/var/www/public/async-docs';
+        return implode(DIRECTORY_SEPARATOR, ["var", "www", "public", "async-docs", "v1"]);
     }
 }
