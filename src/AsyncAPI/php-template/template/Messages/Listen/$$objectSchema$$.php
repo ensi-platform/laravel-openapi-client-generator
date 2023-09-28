@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ params.packageName }}\Messages\Listen;
+namespace {{ params.packageName | safe }}\Messages\Listen;
 
 {% if schema.description() or schema.examples() %}/**{% for line in schema.description() | splitByLines %}
  * {{ line | safe}}{% endfor %}{% if schema.examples() %}
