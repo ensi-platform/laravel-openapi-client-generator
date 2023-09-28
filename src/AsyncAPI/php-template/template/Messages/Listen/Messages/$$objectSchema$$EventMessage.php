@@ -14,6 +14,6 @@ class {{schemaName | camelCase | upperFirst}}EventMessage extends BaseEventMessa
     {
         $classPayload = {{schemaName | camelCase | upperFirst}}Payload::class;
 
-        return parent::makeFromRdKafka($message, $classPayload);
+        return parent::make($message, $classPayload);
     }
 }
