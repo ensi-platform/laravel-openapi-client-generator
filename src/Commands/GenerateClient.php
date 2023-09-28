@@ -17,6 +17,7 @@ abstract class GenerateClient extends Command
     protected string $asyncApiOutputDir;
     protected string $asyncApiDocDir;
     protected string $asyncApiTemplateDir;
+    protected string $asyncApiPackage;
     protected string $outputDir;
     protected string $gitUser;
     protected string $gitRepo;
@@ -36,6 +37,7 @@ abstract class GenerateClient extends Command
         $this->asyncApiTemplateDir = config('openapi-client-generator.async_api.template_dir', $this->getDefaultAsyncApiTemplateDir());
         $this->asyncApiDocDir = config('openapi-client-generator.async_api.doc_dir', $this->getDefaultAsyncApiDocDir());
         $this->asyncApiOutputDir = config('openapi-client-generator.async_api.output_dir', "async");
+        $this->asyncApiPackage = config('openapi-client-generator.async_api.package', "AsyncAPI");
 
         $this->gitUser = config('openapi-client-generator.git_user', '');
         $this->gitRepo = config('openapi-client-generator.git_repo_template', '') . "-$this->client";
@@ -97,7 +99,8 @@ abstract class GenerateClient extends Command
 
         $o = escapeshellarg($output);
         $f = escapeshellarg($this->asyncApiDocDir . DIRECTORY_SEPARATOR . "index.yaml");
-        $command = "node $path -o $o -f $f";
+        $n = escapeshellarg($this->asyncApiPackage);
+        $command = "node $path -o $o -f $f -n $n";
 
         $this->info("Generating AsyncApi $this->client client by command: $command");
 
