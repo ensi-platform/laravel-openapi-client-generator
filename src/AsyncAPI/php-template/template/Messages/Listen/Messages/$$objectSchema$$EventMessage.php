@@ -9,4 +9,10 @@ use {{ params.packageName | safe }}\Messages\Listen\Payloads\{{schemaName | came
  */
 class {{schemaName | camelCase | upperFirst}}EventMessage extends BaseEventMessage
 {
+    public static function makeFromRdKafka(Message $message): static
+    {
+        $classPayload = {{schemaName | camelCase | upperFirst}}Payload::class;
+
+        return parent::makeFromRdKafka($message, $classPayload);
+    }
 }
