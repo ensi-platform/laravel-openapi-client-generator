@@ -35,7 +35,7 @@ abstract class GenerateClient extends Command
         $this->asyncApiEnabled = config('openapi-client-generator.async_api.enabled', false);
         $this->asyncApiTemplateDir = config('openapi-client-generator.async_api.template_dir', $this->getDefaultAsyncApiTemplateDir());
         $this->asyncApiDocDir = config('openapi-client-generator.async_api.doc_dir', $this->getDefaultAsyncApiDocDir());
-        $this->asyncApiOutputDir = config('openapi-client-generator.async_api.output_dir', $this->getDefaultAsyncApiOutputDir());
+        $this->asyncApiOutputDir = config('openapi-client-generator.async_api.output_dir', "async");
 
         $this->gitUser = config('openapi-client-generator.git_user', '');
         $this->gitRepo = config('openapi-client-generator.git_repo_template', '') . "-$this->client";
@@ -93,8 +93,9 @@ abstract class GenerateClient extends Command
         }
 
         $path = implode(DIRECTORY_SEPARATOR, [$this->asyncApiTemplateDir, "generate.js"]);
+        $output = $this->outputDir . DIRECTORY_SEPARATOR . $this->asyncApiOutputDir;
 
-        $o = escapeshellarg($this->asyncApiOutputDir);
+        $o = escapeshellarg($output);
         $f = escapeshellarg($this->asyncApiDocDir . DIRECTORY_SEPARATOR . "index.yaml");
         $command = "node $path -o $o -f $f";
 
@@ -213,11 +214,6 @@ abstract class GenerateClient extends Command
     private function getDefaultAsyncApiTemplateDir(): string
     {
         return implode(DIRECTORY_SEPARATOR, [__DIR__, "..", "AsyncAPI"]);
-    }
-
-    private function getDefaultAsyncApiOutputDir(): string
-    {
-        return $this->outputDir . DIRECTORY_SEPARATOR . "async";
     }
 
     private function getDefaultAsyncApiDocDir(): string

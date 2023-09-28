@@ -15,4 +15,8 @@ const generator = new Generator(options.input, options.output);
 
 generator.generateFromFile(options.file).then(() => {
     console.log(chalk.green('The Async API has been successfully generated!'));
-}).catch(console.error);
+}).catch(function(e) {
+    console.error(chalk.red(e));
+
+    process.exit(1);
+});

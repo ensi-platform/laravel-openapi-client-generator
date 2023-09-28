@@ -1,6 +1,6 @@
 <?php
 
-namespace AsyncAPI\Messages\Listen;
+namespace {{ params.packageName }}\Messages\Listen;
 
 use DateTime;
 
