@@ -1,12 +1,12 @@
 <?php
 
-namespace {{ params.packageName | safe }}\Messages\Listen;
+namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
 {% if schema.description() or schema.examples() %}/**{% for line in schema.description() | splitByLines %}
  * {{ line | safe}}{% endfor %}{% if schema.examples() %}
  * Examples: {{schema.examples() | examplesToString | safe}}{% endif %}
  */
-{% endif %}class {{schemaName | camelCase | upperFirst}} extends BasePayload
+{% endif %}class {{schemaName | camelCase | upperFirst}}Payload extends BasePayload
 {
     protected array $dates = [{%- for propName, prop in schema.properties() %}{%if prop | isDateOrDateTime %}
         "{{propName}}",{% endif %}{%- endfor %}

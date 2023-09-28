@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ params.packageName | safe }}\Messages\Listen;
+namespace {{ params.packageName | safe }}\Messages\Listen\Messages;
 
 use Illuminate\Support\Fluent;
 use RdKafka\Message;

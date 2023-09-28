@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ params.packageName | safe }}\Messages\Listen;
+namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
 use DateTime;
 
