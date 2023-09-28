@@ -10,10 +10,5 @@ use RdKafka\Message;
  */
 class {{schemaName | camelCase | upperFirst}}EventMessage extends BaseEventMessage
 {
-    public static function makeFromRdKafka(Message $message): static
-    {
-        $classPayload = {{schemaName | camelCase | upperFirst}}Payload::class;
-
-        return parent::make($message, $classPayload);
-    }
+    public const CLASS_PAYLOAD = {{schemaName | camelCase | upperFirst}}Payload::class;
 }
