@@ -10,13 +10,14 @@ use RdKafka\Message;
  */
 abstract class BaseMessage extends Fluent
 {
-    public const CLASS_PAYLOAD = BasePayload::class;
-
     public static function makeFromRdKafka(Message $message): static
     {
+        $class = static::getPayloadClass();
         $payload = json_decode($message->payload, true);
-        $payload['attributes'] = new static::CLASS_PAYLOAD($payload['attributes']);
+        $payload['attributes'] = new $class($payload['attributes']);
 
         return new static($payload);
     }
+
+    abstract protected static function getPayloadClass(): string;
 }

@@ -10,5 +10,8 @@ use RdKafka\Message;
  */
 class {{schemaName | camelCase | upperFirst}}EventMessage extends BaseEventMessage
 {
-    public const CLASS_PAYLOAD = {{schemaName | camelCase | upperFirst}}Payload::class;
+    protected static function getPayloadClass(): string
+    {
+        return {{schemaName | camelCase | upperFirst}}Payload::class;
+    }
 }
