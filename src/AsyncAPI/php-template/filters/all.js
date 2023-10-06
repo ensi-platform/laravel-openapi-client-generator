@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 function toPHPType(prop) {
     if (isDateOrDateTime(prop)) {
-        return '\\DateTime';
+        return 'DateTime';
     }
 
     switch (prop.type()) {
@@ -19,7 +19,7 @@ function toPHPType(prop) {
         case 'time':
         case 'dateTime':
         case 'date-time':
-            return '\\DateTime';
+            return 'DateTime';
         case 'string':
         case 'password':
         case 'byte':
@@ -40,7 +40,7 @@ function isDateOrDateTime(prop) {
         case 'time':
         case 'dateTime':
         case 'date-time':
-            return '\\DateTime';
+            return 'DateTime';
     }
 
     return false;
