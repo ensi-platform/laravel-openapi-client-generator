@@ -166,6 +166,7 @@ abstract class GenerateClient extends Command
 
             if (in_array($pathFromBase, $this->filesToIgnoreDuringCleanup)) {
                 $disableDeleteDir = true;
+
                 continue;
             }
 
