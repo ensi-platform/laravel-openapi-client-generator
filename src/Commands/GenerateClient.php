@@ -156,6 +156,10 @@ abstract class GenerateClient extends Command
             return true;
         }
 
+        if ($level === 0 && !is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
         $disableDeleteDir = false;
         foreach (scandir($dir) as $fileWithoutDir) {
             if (in_array($fileWithoutDir, ['..', '.'])) {
