@@ -76,7 +76,18 @@ class GeneratePhpClient extends GenerateClient
             RegexIterator::MATCH
         );
 
+        $filesOrFoldersToIgnore = array_map(
+            fn ($fileOfFolder) => $this->outputDir . '/' . $fileOfFolder,
+            $this->filesToIgnoreDuringCleanup
+        );
+
         foreach ($files as $file) {
+            foreach ($filesOrFoldersToIgnore as $fileOrFolderToIgnore) {
+                if (str_contains($file, $fileOrFolderToIgnore)) {
+                    continue 2;
+                }
+            }
+
             try {
                 $patcher = new PhpEnumPatcher($file);
                 $patcher->patch();
