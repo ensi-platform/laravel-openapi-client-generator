@@ -2,18 +2,47 @@
 
 namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
-use ArrayAccess;
-use JsonSerializable;
+use DateTime;
 
-class BasePayload implements ArrayAccess, JsonSerializable
+class BasePayload
 {
-    protected $attributes = [];
+    protected array $attributes = [];
+    protected array $dates = [];
+    protected array $objects = [];
+    protected array $enums = [];
 
     public function __construct($attributes = [])
     {
         foreach ($attributes as $key => $value) {
-            $this->attributes[$key] = $value;
+            $this->attributes[$key] = match(true) {
+                isset($this->dates[$key]) => static::toDate($value ?? null),
+                isset($this->objects[$key]) => static::toObject($value ?? null, $this->objects[$key]),
+                isset($this->enums[$key]) => static::toEnum($value ?? null, $this->enums[$key]),
+                default => $value,
+            };
         }
+    }
+
+    public static function toEnum(mixed $value, string $class): mixed
+    {
+        return isset($value) ? $class::tryFrom($value) : null;
+    }
+
+    public static function toObject(mixed $value, string $class): mixed
+    {
+        return isset($value) ? new $class($value) : null;
+    }
+
+    public static function toDate(mixed $value): ?DateTime
+    {
+        return isset($value) ? new DateTime($value) : null;
+    }
+
+    public function set($key, mixed $value): static
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
     }
 
     public function get($key, $default = null)
@@ -25,7 +54,7 @@ class BasePayload implements ArrayAccess, JsonSerializable
         return $default instanceof Closure ? $default() : $default;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->attributes;
     }
@@ -35,48 +64,8 @@ class BasePayload implements ArrayAccess, JsonSerializable
         return $this->toArray();
     }
 
-    public function toJson($options = 0)
+    public function toJson($options = 0): string|false
     {
         return json_encode($this->jsonSerialize(), $options);
-    }
-
-    public function offsetExists($offset): bool
-    {
-        return isset($this->attributes[$offset]);
-    }
-
-    public function offsetGet($offset): mixed
-    {
-        return $this->get($offset);
-    }
-
-    public function offsetSet($offset, $value): void
-    {
-        $this->attributes[$offset] = $value;
-    }
-
-    public function offsetUnset($offset): void
-    {
-        unset($this->attributes[$offset]);
-    }
-
-    public function __get($key)
-    {
-        return $this->get($key);
-    }
-
-    public function __set($key, $value)
-    {
-        $this->offsetSet($key, $value);
-    }
-
-    public function __isset($key)
-    {
-        return $this->offsetExists($key);
-    }
-
-    public function __unset($key)
-    {
-        $this->offsetUnset($key);
     }
 }

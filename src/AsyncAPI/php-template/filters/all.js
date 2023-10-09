@@ -48,6 +48,12 @@ function isDateOrDateTime(prop) {
 
 filter.isDateOrDateTime = isDateOrDateTime;
 
+function isEnum(prop) {
+    return prop.format() === 'enum';
+}
+
+filter.isEnum = isEnum;
+
 function isNullableOrNotRequired(prop, propName) {
     if (typeof prop._json === 'boolean') {
         return false;

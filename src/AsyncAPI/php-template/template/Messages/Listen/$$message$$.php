@@ -8,9 +8,12 @@ use {{ params.packageName | safe }}\Messages\Listen\Payloads\{{payload.uid() | c
 use RdKafka\Message;
 
 /**
-* @mixin {{payload.uid() | camelCase | upperFirst}}
+* @method {{payload.uid() | camelCase | upperFirst}} getPayload()
 */
-class {{messageName | camelCase | upperFirst}} extends {{payload.uid() | camelCase | upperFirst}}
+class {{messageName | camelCase | upperFirst}} extends MessageContract
 {
-    use BaseMessageTrait;
+    public function __construct(array $payload)
+    {
+        $this->setPayload(new {{payload.uid() | camelCase | upperFirst}}($payload));
+    }
 }

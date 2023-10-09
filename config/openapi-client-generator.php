@@ -28,37 +28,6 @@ return [
     'git_host' => 'gitlab.com',
 
     /**
-     * Args for generate nodejs client
-     */
-    'js_args' => [
-        /**
-         * Specific generator params from https://openapi-generator.tech/docs/generators/typescript-fetch/
-         */
-        'params' => [
-            'npmName' => '<paste_your_npm_package_name>',
-            'useES6' => true,
-            'useSingleRequestParameter' => true,
-            'withInterfaces' => true,
-            'typescriptThreePlus' => true,
-        ],
-
-        /**
-         * Need generate nest js module, only for backend services
-         */
-        'generate_nestjs_module' => false,
-
-        /**
-         * Directory where you can place templates to override default ones. . Used in -t
-         */
-        'template_dir' => '',
-
-        /**
-         * Files that will be ignored during repository cleanup
-         */
-        'files_to_ignore_during_cleanup' => ['.git', '.gitignore'],
-    ],
-
-    /**
      * Args for generate php client
      */
     'php_args' => [
