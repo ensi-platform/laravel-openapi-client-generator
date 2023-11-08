@@ -21,8 +21,5 @@ abstract class MessageContract
         return $this;
     }
 
-    public function getPayload(): BasePayload
-    {
-        return $this->payload;
-    }
+    abstract public function getPayload(): BasePayload;
 }

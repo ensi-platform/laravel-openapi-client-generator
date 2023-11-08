@@ -66,4 +66,12 @@ return [
          */
         'enum_disable_patch' => false,
     ],
+
+    'async_api' => [
+        'enabled' => true,
+        'doc_dir' => public_path('async-docs/v1'),
+        'output_dir' => "lib" . DIRECTORY_SEPARATOR . "Kafka",
+        'package' => "Ensi\ServiceClient\Kafka",
+        'template_dir' => base_path('..' . DIRECTORY_SEPARATOR . '<paste_your_client_package_name>'),
+    ],
 ];
