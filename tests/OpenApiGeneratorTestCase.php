@@ -62,15 +62,5 @@ class OpenApiGeneratorTestCase extends Orchestra
             'packageName' => 'OpenapiClientPHPExample',
         ]);
         config()->set('openapi-client-generator.php_args.composer_name', 'ensi/openapi-client-php-example');
-
-        // JS client params
-        config()->set('openapi-client-generator.js_args.params', [
-            'npmName' => 'open-api-example-client-js',
-            'useES6' => true,
-            'useSingleRequestParameter' => true,
-            'withInterfaces' => true,
-            'typescriptThreePlus' => true,
-        ]);
-        config()->set('openapi-client-generator.js_args.generate_nestjs_module', true);
     }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@ensi/asyncapi-php-template",
+  "version": "0.0.1",
+  "description": "Template package for AsyncAPI code generation",
+  "keywords": [
+    "asyncapi",
+    "generator",
+    "template",
+    "php"
+  ],
+  "generator": {
+    "parameters": {
+      "packageName": {
+        "description": "Name of the package",
+        "default": "AsyncAPI"
+      }
+    },
+    "filters": [
+      "@asyncapi/generator-filters"
+    ],
+    "generator": ">=1.1.0 <2.0.0"
+  }
+}
