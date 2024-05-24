@@ -1,11 +1,12 @@
 <?php
 
 $finder = Symfony\Component\Finder\Finder::create()
-    ->notPath('vendor')
-    ->in(__DIR__)
+    ->in([
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ])
     ->name('*.php')
-    ->notName('_ide_helper.php')
-    ->notName('_ide_helper_models.php')
+    ->notName('*.blade.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 

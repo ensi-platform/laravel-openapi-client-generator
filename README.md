@@ -1,27 +1,70 @@
 # Laravel OpenApi Client Generator
 
-Пакет для Laravel, который генерирует http клиенты к сервису при помощи [OpenApi Generator](https://openapi-generator.tech/).
-На данный момент есть поддержка для одной платформы: PHP.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ensi/laravel-openapi-client-generator.svg?style=flat-square)](https://packagist.org/packages/ensi/laravel-openapi-client-generator)
+[![Tests](https://github.com/ensi-platform/laravel-php-rdkafka/actions/workflows/run-tests.yml/badge.svg?branch=master)](https://github.com/ensi-platform/laravel-php-rdkafka/actions/workflows/run-tests.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/ensi/laravel-openapi-client-generator.svg?style=flat-square)](https://packagist.org/packages/ensi/laravel-openapi-client-generator)
 
-## Зависимости:
-1. Java 8 и выше.
-2. npm 5.2 и выше.
+A package for Laravel that generates http clients to the service using [OpenApi Generator](https://openapi-generator.tech/).
+At the moment, there is support for one platform: PHP.
 
-## Установка:
-1. `composer require --dev ensi/laravel-openapi-client-generator`
-2. `php artisan vendor:publish --provider="Greensight\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider"` - копирует конфиг генератора в конфиги приложения
-3. измените, если требуется, настройки по умолчанию в конфигурационном файле
-   
+## Installation
 
-## Запуск:
-1. Перед запуском убедиться, что структура описания апи соответствует [этим требованиям](docs/api_schema_requirements.md).
+You can install the package via composer:
 
-2. Настроить параметры генерации (если дефолтные не подходят).
+```bash
+composer require ensi/laravel-openapi-client-generator --dev
+```
 
-3. Генерация клиента:
+Publish the config file with:
+
+```bash
+php artisan vendor:publish --provider="Ensi\LaravelOpenapiClientGenerator\OpenapiClientGeneratorServiceProvider"
+```
+
+## Version Compatibility
+
+| Laravel OpenApi Client Generator | Laravel                             | PHP            |
+|----------------------------------|-------------------------------------|----------------|
+| ^0.0.1                           | ^7.x                                | ^7.1.3         |
+| ^0.2.0 - ^0.8.3                  | ^7.x                                | ^7.1.3         |
+| ^0.8.4                           | ^7.x                                | ^7.2.0         |
+| ^0.9.0                           | ^7.x \|\| ^8.x                      | ^7.2.0         |
+| ^0.10.0 - ^0.12.0                | ^7.x \|\| ^8.x                      | ^7.2 \|\| ^8.0 |
+| ^0.12.1                          | ^8.x \|\| ^9.x                      | ^7.2 \|\| ^8.0 |
+| ^0.13.0                          | ^8.x \|\| ^9.x                      | ^8.1           |
+| ^0.13.1                          | ^8.x \|\| ^9.x \|\| ^10.x           | ^8.1           |
+| ^0.13.5                          | ^8.x \|\| ^9.x \|\| ^10.x\|\| ^11.x | ^8.1           |
+| ^0.14.0                          | ^9.x \|\| ^10.x\|\| ^11.x           | ^8.1           |
+
+## Basic Usage:
+
+1. Before launching, make sure that the api description structure meets [these requirements](docs/api_schema_requirements.md).
+
+2. Configure the generation parameters (if the default ones are not suitable).
+
+3. Client Generation:
     * [php](docs/php_client_requirements.md)
 
-4. После успешной генерации по пути `<output_dir_template>-php` появится код клиента, который можно запушить в git, в корне будет лежать скрипт git_push который удобно использовать для этого. Соответствующие репозитории должны быть уже созданы в соответствующей системе контроля версий. Полное название репозитория формируется так: `<git_user>/<git_repo_template>-php`.
+4. After successful generation, the client code will appear along the path `<output_dir_template>-php`, which can be put into git, the git_push script will be at the root, which is convenient to use for this. The corresponding repositories should already be created in the appropriate version control system. The full name of the repository is formed as follows: `<git_user>/<git_repo_template>-php`.
 
-## Ограничения
-Пакет на данный момент не поддерживает генерацию в Windows окружении.
+## Limitations
+
+The package currently does not support generation in a Windows environment.
+
+## Contributing
+
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+### Testing
+
+1. composer install
+2. npm install
+3. composer test
+
+## Security Vulnerabilities
+
+Please review [our security policy](.github/SECURITY.md) on how to report security vulnerabilities.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
