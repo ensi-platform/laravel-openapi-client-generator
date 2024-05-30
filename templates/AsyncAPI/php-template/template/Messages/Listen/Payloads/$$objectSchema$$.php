@@ -3,7 +3,8 @@
 namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
 {%- for propName, prop in schema.properties() %}{%if prop | isEnum %}
-{ params.packageName | safe }}\Messages\Listen\Enums\{{ prop | toPHPType | safe }};{% endif %}{%- endfor %}
+use {{ params.packageName | safe }}\Messages\Listen\Enums\{{ prop | toPHPType | safe }};{% endif %}{%- endfor %}
+use DateTime;
 
 
 class {{schemaName | camelCase | upperFirst}} extends BasePayload

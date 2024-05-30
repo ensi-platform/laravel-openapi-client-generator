@@ -2,9 +2,8 @@
 
 namespace {{ params.packageName | safe }}\Messages\Listen;
 
+use {{ params.packageName | safe }}\Messages\Listen\Payloads\BasePayload;
 use RdKafka\Message;
-
-{ params.packageName | safe }}\Messages\Listen\Payloads\BasePayload;
 
 abstract class MessageContract
 {

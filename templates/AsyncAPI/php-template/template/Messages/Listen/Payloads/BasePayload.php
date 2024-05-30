@@ -2,6 +2,8 @@
 
 namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
+use DateTime;
+
 class BasePayload
 {
     protected array $attributes = [];
