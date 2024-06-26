@@ -1,16 +1,59 @@
+# Project #
+########################
+.php_cs.cache
+.php-cs-fixer.cache
+.huskyrc
+clients/*
+!clients/.gitkeep
+storage/ensi
+generated
+studio.json
+build
 /node_modules
 /vendor
+.phpunit.result.cache
 composer.lock
+composer.local.json
+Homestead.json
+Homestead.yaml
 npm-debug.log
 yarn-error.log
-.php_cs.cache
 
 # IDEs #
 ###################
 *.sublime-project
 *.sublime-workspace
-/.idea/
+/.idea
+/.vscode
 *.komodoproject
+.vscode
+
+# Static content #
+###################
+*.csv
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.xml
+!phpunit.xml
+!psalm.xml
+*.yml
+*.txt
+*.wav
+*.mp3
+*.avi
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.box
 
 # Packages #
 ############
@@ -38,9 +81,5 @@ yarn-error.log
 .vagrant
 ehthumbs.db
 Thumbs.db
-
-# tests
-openapitools.json
-.phpunit.result.cache
-build
-.php-cs-fixer.cache
+sftp-config.json
+auth.json

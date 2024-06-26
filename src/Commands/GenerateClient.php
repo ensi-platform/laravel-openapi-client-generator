@@ -222,11 +222,11 @@ abstract class GenerateClient extends Command
 
     private function getDefaultAsyncApiTemplateDir(): string
     {
-        return implode(DIRECTORY_SEPARATOR, [__DIR__, "..", "AsyncAPI"]);
+        return realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, "..", "..", "templates", "AsyncAPI"]));
     }
 
     private function getDefaultAsyncApiDocDir(): string
     {
-        return implode(DIRECTORY_SEPARATOR, ["", "var", "www", "public", "async-docs", "v1"]);
+        return realpath(implode(DIRECTORY_SEPARATOR, ["", "var", "www", "public", "async-docs", "v1"]));
     }
 }
