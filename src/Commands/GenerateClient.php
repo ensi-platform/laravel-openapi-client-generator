@@ -158,7 +158,7 @@ abstract class GenerateClient extends Command
         $source = !is_null($externalSource) && file_exists($externalSource) ? $externalSource : $internalSource;
 
         $dest = $this->outputDir . DIRECTORY_SEPARATOR . 'LICENSE.md';
-        if (!file_exists($dest) && file_exists($source)) {
+        if (!file_exists($dest) && file_exists($source) && filesize($source) > 0) {
             copy($source, $dest);
             $this->info("Template LICENSE.md copied to package");
         }
