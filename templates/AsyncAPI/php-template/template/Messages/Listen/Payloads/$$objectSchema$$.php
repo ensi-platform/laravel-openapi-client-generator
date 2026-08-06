@@ -4,13 +4,13 @@ namespace {{ params.packageName | safe }}\Messages\Listen\Payloads;
 
 {%- for propName, prop in schema.properties() %}{%if prop | isEnum %}
 use {{ params.packageName | safe }}\Messages\Listen\Enums\{{ prop | toPHPType | safe }};{% endif %}{%- endfor %}
-use DateTime;
+use DateTimeInterface;
 
 
 class {{schemaName | camelCase | upperFirst}} extends BasePayload
 {
     protected array $dates = [{%- for propName, prop in schema.properties() %}{%if prop | isDateOrDateTime %}
-        "{{propName}}",{% endif %}{%- endfor %}
+        "{{propName}}" => "{{ prop | dateFormat | safe }}",{% endif %}{%- endfor %}
     ];
 
     protected array $objects = [{%- for propName, prop in schema.properties() %}{%if prop.type() === "object" %}

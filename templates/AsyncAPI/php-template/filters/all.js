@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 function toPHPType(prop) {
     if (isDateOrDateTime(prop)) {
-        return 'DateTime';
+        return 'DateTimeInterface';
     }
 
     switch (prop.type()) {
@@ -19,7 +19,7 @@ function toPHPType(prop) {
         case 'time':
         case 'dateTime':
         case 'date-time':
-            return 'DateTime';
+            return 'DateTimeInterface';
         case 'string':
         case 'password':
         case 'byte':
@@ -35,18 +35,24 @@ function toPHPType(prop) {
 filter.toPHPType = toPHPType;
 
 function isDateOrDateTime(prop) {
-    switch (prop.format()) {
+    switch (dateFormat(prop)) {
         case 'date':
         case 'time':
         case 'dateTime':
         case 'date-time':
-            return 'DateTime';
+            return true;
     }
 
     return false;
 }
 
 filter.isDateOrDateTime = isDateOrDateTime;
+
+function dateFormat(prop) {
+    return prop.format() || prop.type();
+}
+
+filter.dateFormat = dateFormat;
 
 function isEnum(prop) {
     return prop.format() === 'enum';

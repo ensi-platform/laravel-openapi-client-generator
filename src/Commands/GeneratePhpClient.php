@@ -4,6 +4,7 @@ namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\OpenApiDateTimePatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
 use Exception;
@@ -54,6 +55,8 @@ class GeneratePhpClient extends GenerateClient
 
     protected function patchClientPackage(): void
     {
+        $this->patchOpenApiDateTimeSerialization();
+
         if (!$this->disableEnumPath) {
             $this->patchEnums();
         }
@@ -61,6 +64,13 @@ class GeneratePhpClient extends GenerateClient
         $this->patchComposerPackage();
         $this->patchReadme();
         $this->generateProvider();
+    }
+
+    private function patchOpenApiDateTimeSerialization(): void
+    {
+        $file = $this->outputDir . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'ObjectSerializer.php';
+        $patcher = new OpenApiDateTimePatcher($file);
+        $patcher->patch();
     }
 
     private function patchEnums(): void
