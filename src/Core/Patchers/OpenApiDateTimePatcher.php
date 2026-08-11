@@ -29,28 +29,39 @@ class OpenApiDateTimePatcher extends PhpClassPatcher
 
     protected function patchDefaultDateTimeFormat(string $content): string
     {
-        return $this->replaceValue(
+        return $this->replaceRequiredValue(
             $content,
             'private static $dateTimeFormat = \DateTime::ATOM;',
-            "private static \$dateTimeFormat = 'Y-m-d\\\\TH:i:s.u\\\\Z';"
+            "private static \$dateTimeFormat = 'Y-m-d\\\\TH:i:s.u\\\\Z';",
+            'default DateTime format'
         );
     }
 
     protected function patchDateTimeInterfaceSupport(string $content): string
     {
-        return $this->replaceValue(
+        $pattern = '/instanceof\s+\\\\DateTime(?!Interface\b)/';
+        $patchedContent = $this->replaceRequiredPattern(
             $content,
-            'instanceof \DateTime',
-            'instanceof \DateTimeInterface'
+            $pattern,
+            'instanceof \DateTimeInterface',
+            'DateTimeInterface support',
+            str_contains($content, 'instanceof \DateTimeInterface')
         );
+
+        if (str_contains($patchedContent, 'DateTimeInterfaceInterface')) {
+            throw new Exception('DateTimeInterface support patch produced invalid DateTimeInterfaceInterface type');
+        }
+
+        return $patchedContent;
     }
 
     protected function patchDateTimeFormatting(string $content): string
     {
-        $content = $this->replaceValue(
+        $content = $this->replaceRequiredValue(
             $content,
             "return (\$format === 'date') ? \$data->format('Y-m-d') : \$data->format(self::\$dateTimeFormat);",
-            "return (\$format === 'date') ? \$data->format('Y-m-d') : self::formatDateTime(\$data);"
+            "return (\$format === 'date') ? \$data->format('Y-m-d') : self::formatDateTime(\$data);",
+            'sanitizeForSerialization DateTime formatting'
         );
 
         $content = $this->replaceValue(
@@ -59,19 +70,17 @@ class OpenApiDateTimePatcher extends PhpClassPatcher
             'return ["{$paramName}" => self::formatDateTime($value)];'
         );
 
-        return $this->replaceValue(
+        $content = $this->replaceValue(
             $content,
             'return $value->format(self::$dateTimeFormat);',
             'return self::formatDateTime($value);'
         );
+
+        return $this->assertNoUnsafeDateTimeFormatting($content);
     }
 
     protected function addFormatDateTimeMethod(string $content): string
     {
-        if (str_contains($content, 'function formatDateTime(')) {
-            return $content;
-        }
-
         $method = <<<'PHP'
     private static function formatDateTime(\DateTimeInterface $dateTime)
     {
@@ -81,7 +90,7 @@ class OpenApiDateTimePatcher extends PhpClassPatcher
             new \DateTimeZone('UTC')
         );
 
-        if (false === $utcDateTime) {
+        if ($utcDateTime === false) {
             $utcDateTime = new \DateTimeImmutable('@' . $dateTime->getTimestamp());
         }
 
@@ -90,19 +99,76 @@ class OpenApiDateTimePatcher extends PhpClassPatcher
 
 PHP;
 
-        $sanitizeFilenameDocBlock = <<<'PHP'
-    /**
-     * Sanitize filename by removing path.
-PHP;
-
-        if (str_contains($content, $sanitizeFilenameDocBlock)) {
-            return $this->replaceValue($content, $sanitizeFilenameDocBlock, $method . $sanitizeFilenameDocBlock);
+        if (str_contains($content, 'function formatDateTime(')) {
+            return $this->assertFormatDateTimeMethodExists($content);
         }
 
-        return $this->replaceValue(
+        $content = $this->replaceRequiredValue(
             $content,
             '    public static function sanitizeFilename($filename)',
-            $method . '    public static function sanitizeFilename($filename)'
+            $method . '    public static function sanitizeFilename($filename)',
+            'formatDateTime method insertion point'
         );
+
+        return $this->assertFormatDateTimeMethodExists($content);
+    }
+
+    /** @throws Exception */
+    protected function replaceRequiredValue(
+        string $content,
+        string $oldValue,
+        string $newValue,
+        string $description
+    ): string {
+        $count = 0;
+        $patchedContent = str_replace($oldValue, $newValue, $content, $count);
+
+        if ($count === 0) {
+            throw new Exception("Не удалось пропатчить {$description}");
+        }
+
+        return $patchedContent;
+    }
+
+    /** @throws Exception */
+    protected function replaceRequiredPattern(
+        string $content,
+        string $pattern,
+        string $newValue,
+        string $description,
+        bool $allowNoReplacement = false
+    ): string {
+        $count = 0;
+        $patchedContent = preg_replace($pattern, $newValue, $content, -1, $count);
+
+        if ($patchedContent === null) {
+            throw new Exception("Не удалось применить регулярное выражение для {$description}");
+        }
+
+        if ($count === 0 && !$allowNoReplacement) {
+            throw new Exception("Не удалось пропатчить {$description}");
+        }
+
+        return $patchedContent;
+    }
+
+    /** @throws Exception */
+    protected function assertFormatDateTimeMethodExists(string $content): string
+    {
+        if (!str_contains($content, 'function formatDateTime(')) {
+            throw new Exception('Не удалось добавить formatDateTime');
+        }
+
+        return $content;
+    }
+
+    /** @throws Exception */
+    protected function assertNoUnsafeDateTimeFormatting(string $content): string
+    {
+        if (str_contains($content, '->format(self::$dateTimeFormat)')) {
+            throw new Exception('ObjectSerializer contains unsafe DateTime formatting without UTC conversion');
+        }
+
+        return $content;
     }
 }

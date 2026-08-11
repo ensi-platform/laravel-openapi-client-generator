@@ -99,12 +99,12 @@ class BasePayload
 
     protected static function formatDate(DateTimeInterface $value, string $format): string
     {
-        if ('date' === $format) {
+        if ($format === 'date') {
             return $value->format('Y-m-d');
         }
 
         $utcDateTime = DateTimeImmutable::createFromFormat('U.u', $value->format('U.u'), new DateTimeZone('UTC'));
-        if (false === $utcDateTime) {
+        if ($utcDateTime === false) {
             $utcDateTime = new DateTimeImmutable('@' . $value->getTimestamp());
         }
 
