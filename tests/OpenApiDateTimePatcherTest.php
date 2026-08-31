@@ -30,6 +30,9 @@ class {{ className }}
         return $value->format(self::$dateTimeFormat);
     }
 
+    /**
+     * Sanitize filename by removing path.
+     */
     public static function sanitizeFilename($filename)
     {
         return $filename;
@@ -128,4 +131,13 @@ test('OpenApiDateTimePatcher guarantees formatDateTime method exists after patch
     $content = patchObjectSerializerFixture(objectSerializerFixture($className));
 
     expect($content)->toContain('function formatDateTime(');
+});
+
+test('OpenApiDateTimePatcher keeps sanitizeFilename docblock attached to sanitizeFilename', function () {
+    $className = 'FormatDateTimeSpacingObjectSerializer' . str_replace('.', '', uniqid('', true));
+    $content = patchObjectSerializerFixture(objectSerializerFixture($className));
+
+    expect($content)->toContain("     * Sanitize filename by removing path.\n     */\n    public static function sanitizeFilename(\$filename)")
+        ->and($content)->not->toContain("     * Sanitize filename by removing path.\n     */\n    private static function formatDateTime(")
+        ->and($content)->toContain("    }\n\n    private static function formatDateTime(");
 });

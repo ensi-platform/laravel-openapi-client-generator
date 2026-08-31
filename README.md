@@ -61,18 +61,6 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 2. npm install
 3. composer test
 
-Or run tests in Docker:
-
-```bash
-docker compose run --rm app
-```
-
-To keep generated files owned by your host user:
-
-```bash
-USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose run --rm app
-```
-
 ## Security Vulnerabilities
 
 Please review [our security policy](.github/SECURITY.md) on how to report security vulnerabilities.

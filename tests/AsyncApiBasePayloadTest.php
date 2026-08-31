@@ -43,3 +43,21 @@ test('AsyncAPI BasePayload keeps date format in original timezone', function () 
         'created_on' => '2026-08-10',
     ]);
 });
+
+test('AsyncAPI BasePayload passes date format to array items', function () {
+    $className = requireAsyncBasePayload(['dates' => 'date']);
+    $payload = (new $className())->set(
+        'dates',
+        [
+            new DateTimeImmutable('2026-08-10T00:30:00.000000+03:00'),
+            new DateTimeImmutable('2026-08-11T23:30:00.000000-03:00'),
+        ]
+    );
+
+    expect($payload->toArray())->toBe([
+        'dates' => [
+            '2026-08-10',
+            '2026-08-11',
+        ],
+    ]);
+});

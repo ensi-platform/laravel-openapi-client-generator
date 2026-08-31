@@ -103,12 +103,7 @@ PHP;
             return $this->assertFormatDateTimeMethodExists($content);
         }
 
-        $content = $this->replaceRequiredValue(
-            $content,
-            '    public static function sanitizeFilename($filename)',
-            $method . '    public static function sanitizeFilename($filename)',
-            'formatDateTime method insertion point'
-        );
+        $content = $this->insertBeforeClassClosingBrace($content, $method, 'formatDateTime method');
 
         return $this->assertFormatDateTimeMethodExists($content);
     }
@@ -170,5 +165,16 @@ PHP;
         }
 
         return $content;
+    }
+
+    /** @throws Exception */
+    protected function insertBeforeClassClosingBrace(string $content, string $value, string $description): string
+    {
+        $position = strrpos($content, "\n}");
+        if ($position === false) {
+            throw new Exception("Не удалось найти точку вставки для {$description}");
+        }
+
+        return substr_replace($content, "\n\n" . rtrim($value) . "\n", $position, 0);
     }
 }

@@ -91,7 +91,7 @@ class BasePayload
         }
 
         if (is_array($value)) {
-            return array_map(fn ($item) => static::serializeValue($item), $value);
+            return array_map(fn ($item) => static::serializeValue($item, $dateFormat), $value);
         }
 
         return $value;
