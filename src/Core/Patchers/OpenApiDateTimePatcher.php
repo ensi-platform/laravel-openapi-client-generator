@@ -39,7 +39,7 @@ class OpenApiDateTimePatcher extends PhpClassPatcher
 
     protected function patchDateTimeInterfaceSupport(string $content): string
     {
-        $pattern = '/instanceof\s+\\\\DateTime(?!Interface\b)/';
+        $pattern = '/instanceof\s+\\\\DateTime\b/';
         $patchedContent = $this->replaceRequiredPattern(
             $content,
             $pattern,
