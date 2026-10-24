@@ -13,7 +13,7 @@ class OpenapiClientGeneratorServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/' . self::CONFIG_FILE_NAME,
-            self::CONFIG_FILE_NAME
+            str_replace('.php', '', self::CONFIG_FILE_NAME)
         );
     }
 
