@@ -4,6 +4,7 @@ namespace Ensi\LaravelOpenapiClientGenerator\Commands;
 
 use Ensi\LaravelOpenapiClientGenerator\Core\Generators\PhpProviderGenerator;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ComposerPackagePatcher;
+use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\GuzzleJsonPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\OpenApiDateTimePatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\PhpEnumPatcher;
 use Ensi\LaravelOpenapiClientGenerator\Core\Patchers\ReadmePatcher;
@@ -56,6 +57,7 @@ class GeneratePhpClient extends GenerateClient
     protected function patchClientPackage(): void
     {
         $this->patchOpenApiDateTimeSerialization();
+        $this->patchGuzzleJsonEncoding();
 
         if (!$this->disableEnumPath) {
             $this->patchEnums();
@@ -64,6 +66,30 @@ class GeneratePhpClient extends GenerateClient
         $this->patchComposerPackage();
         $this->patchReadme();
         $this->generateProvider();
+    }
+
+    private function patchGuzzleJsonEncoding(): void
+    {
+        $files = new RegexIterator(
+            new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator(
+                    $this->outputDir . DIRECTORY_SEPARATOR . 'lib',
+                    FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+                )
+            ),
+            '/\\.php$/i',
+            RegexIterator::MATCH
+        );
+
+        foreach ($files as $file) {
+            foreach ($this->filesToIgnoreDuringCleanup as $ignoredPath) {
+                if (str_contains($file, $this->outputDir . '/' . $ignoredPath)) {
+                    continue 2;
+                }
+            }
+
+            (new GuzzleJsonPatcher($file))->patch();
+        }
     }
 
     private function patchOpenApiDateTimeSerialization(): void
