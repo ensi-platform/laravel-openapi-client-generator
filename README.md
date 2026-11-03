@@ -35,7 +35,7 @@ php artisan vendor:publish --provider="Ensi\LaravelOpenapiClientGenerator\Openap
 | ^0.13.1                          | ^8.x \|\| ^9.x \|\| ^10.x                        | ^8.1           |
 | ^0.13.5                          | ^8.x \|\| ^9.x \|\| ^10.x\|\| ^11.x              | ^8.1           |
 | ^0.14.0                          | ^9.x \|\| ^10.x\|\| ^11.x                        | ^8.1           |
-| ^0.14.8                          | ^12.x \|\| ^13.x                                 | ^8.2           |
+| ^0.15.0                          | ^12.x \|\| ^13.x                                 | ^8.2           |
 
 ## Basic Usage:
 
